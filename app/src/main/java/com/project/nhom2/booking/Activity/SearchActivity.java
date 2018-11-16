@@ -155,9 +155,9 @@ public class SearchActivity extends AppCompatActivity {
 
         //ngày nhỏ nhất và khoảng thời gian dài nhất có thể trả phòng
         //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
-        // nên cần cộng thêm số milisecond giây của 1 tháng
+        // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
         long checkOutMinDate =
-                dateToMiliseconds(checkInDay,checkInMonth,checkInYear) + 2592000000L + 259200000;
+                dateToMiliseconds(checkInDay,checkInMonth,checkInYear) + 2592000000L + 172800000;
         long checkOutMaxDate = checkInMaxDate;
 
         switch (id) {
