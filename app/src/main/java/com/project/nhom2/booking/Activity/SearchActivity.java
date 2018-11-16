@@ -30,10 +30,6 @@ public class SearchActivity extends AppCompatActivity {
     private int checkInMonth;
     private int checkInDay;
 
-    private int checkOutYear;
-    private int checkOutMonth;
-    private int checkOutDay;
-
     static final int DATE_DIALOG_ID_FROM = 0;
     static final int DATE_DIALOG_ID_TO = 1;
 
@@ -44,13 +40,13 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // Gán các component trên giao diện
-        CheckInDateDisplay = (TextView) findViewById(R.id.check_in_date_picker);
-        CheckOutDateDisplay = (TextView) findViewById(R.id.check_out_date_picker);
+        CheckInDateDisplay = findViewById(R.id.check_in_date_picker);
+        CheckOutDateDisplay = findViewById(R.id.check_out_date_picker);
 
-        sp_room_type = (Spinner) findViewById(R.id.sp_room_type);
-        sp_bed_type = (Spinner) findViewById(R.id.sp_bed_type);
-        sp_no_beds = (Spinner) findViewById(R.id.sp_no_beds);
-        sp_floor = (Spinner) findViewById(R.id.sp_floor);
+        sp_room_type = findViewById(R.id.sp_room_type);
+        sp_bed_type = findViewById(R.id.sp_bed_type);
+        sp_no_beds = findViewById(R.id.sp_no_beds);
+        sp_floor = findViewById(R.id.sp_floor);
 
 
         //Khởi tạo các mảng dữ liệu
@@ -123,10 +119,7 @@ public class SearchActivity extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            checkOutYear = year;
-            checkOutMonth = monthOfYear;
-            checkOutDay = dayOfMonth;
-            updateDisplay(CheckOutDateDisplay, checkOutDay, checkOutMonth, checkOutYear);
+            updateDisplay(CheckOutDateDisplay, dayOfMonth, monthOfYear, year);
         }
     };
 
@@ -150,26 +143,28 @@ public class SearchActivity extends AppCompatActivity {
                 .append(year).append(" "));
     }
 
-    // Khởi tạo các ô chọn ngày
+    // Khởi tạo các ô chọn ngày và xác định các giới hạn
     @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
 
         //ngày nhỏ nhất và khoảng thời gian dài nhất có thể đặt phòng
-        long checkInMinDate = System.currentTimeMillis() - 1000;
-        //cho phép đặt phòng sớm nhất là trước 3 tháng
+        long checkInMinDate = System.currentTimeMillis();
+        //cho phép đặt phòng sớm nhất là trước 3 tháng tính từ thời điểm hiện tại
         long checkInMaxDate = System.currentTimeMillis() + 7889238000L;
 
         //ngày nhỏ nhất và khoảng thời gian dài nhất có thể trả phòng
-        long checkOutMinDate = dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 172800000;
-        //cho phép đặt phòng sớm nhất là trước 3 tháng
-        long checkOutMaxDate = dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L;
+        //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
+        // nên cần cộng thêm số milisecond giây của 1 tháng
+        long checkOutMinDate =
+                dateToMiliseconds(checkInDay,checkInMonth,checkInYear) + 2592000000L + 259200000;
+        long checkOutMaxDate = checkInMaxDate;
 
         switch (id) {
             case DATE_DIALOG_ID_FROM:
                 DatePickerDialog fromDatePickerDialog = new DatePickerDialog
                         (this, checkInDateSetListener, checkInYear, checkInMonth,
-                        checkInDay);
+                                checkInDay);
 
                 //giới hạn khoảng thời gian có thể đặt phòng
                 fromDatePickerDialog.getDatePicker().setMinDate(checkInMinDate);
@@ -180,10 +175,10 @@ public class SearchActivity extends AppCompatActivity {
             case DATE_DIALOG_ID_TO:
                 DatePickerDialog toDatePickerDialog = new DatePickerDialog
                         (this, checkOutDateSetListener, checkInYear, checkInMonth,
-                        checkInDay);
+                                checkInDay);
 
                 toDatePickerDialog.getDatePicker().setMinDate(checkOutMinDate);
-                toDatePickerDialog.getDatePicker().setMinDate(checkOutMaxDate);
+                toDatePickerDialog.getDatePicker().setMaxDate(checkOutMaxDate);
 
                 return toDatePickerDialog;
         }
@@ -191,14 +186,13 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    // hàm chuyển mốc thời gian đặt phòng thành miliseconds
+    // chuyển mốc thời gian đặt phòng thành miliseconds
     private long dateToMiliseconds(int day, int month, int year) {
 
         GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
         gc.clear();
         gc.set(year, month - 1, day);
         return gc.getTimeInMillis();
-
     }
 
 }

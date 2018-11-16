@@ -22,6 +22,6 @@
         <activity android:name=".Activity.SignInActivity" />
         <activity android:name=".Activity.SignUpActivity" />
         <activity android:name=".Activity.UserInformationActivity" />
-        
+
     </application>
 </manifest>
