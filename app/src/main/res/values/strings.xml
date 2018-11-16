@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">JustBook</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="title_activity_user_information">UserInformationActivity</string>
+
+    <string name="floor">Tầng</string>
+    <string name="room_type">Loại phòng</string>
+    <string name="bed_type">Loại giường</string>
+    <string name="check_in">Ngày đến</string>
+    <string name="check_out">Ngày đi</string>
+    <string name="no_customers">Số người</string>
+    <string name="no_beds">Số giường</string>
+    <string name="price">Khoảng giá</string>
+    <string name="bed1">Giường đôi</string>
+    <string name="bed2">Giường đơn</string>
+    <string name="wifi">Wifi</string>
+    <string name="tivi">Tivi</string>
+    <string name="search">Tìm</string>
+    <string name="book">Đặt phòng</string>
+
+    <string-array name="sp_room_type">
+        <item>Thường</item>
+        <item>VIP</item>
+    </string-array>
+
+    <string-array name="sp_floor_vip">
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="sp_floor">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="sp_bed_type">
+        <item>Giường đơn</item>
+        <item>Giường đôi</item>
+    </string-array>
+
+    <string name="rule1">- Giờ check-in: cả ngày</string>
+    <string name="rule2">- Giờ check-out: trước 12h trưa ngày hôm sau</string>
+    <string name="rule3">- Giá phòng thường: 100$ (chưa tính phụ thu)</string>
+    <string name="rule4">- Giá phòng vip: 500$ (chưa tính phụ thu)</string>
+    <string name="rule5">- Khách hàng chỉ được đặt một lúc một phòng</string>
+    <string name="rule6">- Mỗi phòng cho nhiều nhất 4 người sinh hoạt</string>
+
+
+</resources>
