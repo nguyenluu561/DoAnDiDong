@@ -19,27 +19,13 @@
     <string name="book">Đặt phòng</string>
 
     <string-array name="sp_room_type">
-        <item>Thường</item>
-        <item>VIP</item>
-    </string-array>
-
-    <string-array name="sp_floor_vip">
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </string-array>
-
-    <string-array name="sp_floor">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
+        <item>thuong</item>
+        <item>vip</item>
     </string-array>
 
     <string-array name="sp_bed_type">
-        <item>Giường đơn</item>
-        <item>Giường đôi</item>
+        <item>don</item>
+        <item>doi</item>
     </string-array>
 
     <string name="rule1">- Giờ check-in: cả ngày</string>

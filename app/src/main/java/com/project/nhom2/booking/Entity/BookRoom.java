@@ -1,4 +1,4 @@
-package com.project.nhom2.booking.Modle;
+package com.project.nhom2.booking.Entity;
 
 public class BookRoom {
     private String IdBookRoom;

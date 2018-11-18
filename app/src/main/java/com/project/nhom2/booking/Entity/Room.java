@@ -1,7 +1,7 @@
-package com.project.nhom2.booking.Modle;
+package com.project.nhom2.booking.Entity;
 
 public class Room {
-    private  String IdRoom;
+    private String IdRoom;
     private String IdRoomType;
     private String Status;
 

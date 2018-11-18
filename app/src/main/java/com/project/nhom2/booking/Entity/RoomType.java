@@ -1,15 +1,15 @@
-package com.project.nhom2.booking.Modle;
+package com.project.nhom2.booking.Entity;
 
 public class RoomType {
     private String IdRoomType;
     private String RoomTypeName;
     private String Quality;
-    private float price;
+    private int price;
 
     public RoomType() {
     }
 
-    public RoomType(String idRoomType, String roomTypeName, String quality, float price) {
+    public RoomType(String idRoomType, String roomTypeName, String quality, int price) {
         IdRoomType = idRoomType;
         RoomTypeName = roomTypeName;
         Quality = quality;
@@ -40,11 +40,11 @@ public class RoomType {
         Quality = quality;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }

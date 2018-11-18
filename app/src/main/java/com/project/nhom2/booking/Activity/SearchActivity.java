@@ -2,68 +2,93 @@ package com.project.nhom2.booking.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
+import com.project.nhom2.booking.Util.CheckConnection;
+import com.project.nhom2.booking.Util.StaticFinalString;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class SearchActivity extends AppCompatActivity {
 
+    String link;
     TextView CheckInDateDisplay;
     TextView CheckOutDateDisplay;
     Spinner sp_room_type;
     Spinner sp_bed_type;
-    Spinner sp_floor;
-    Spinner sp_no_beds;
+    Button btn_search;
+
+    ArrayList<RoomBom> arrRoom;
 
     private int checkInYear;
     private int checkInMonth;
     private int checkInDay;
 
+    private int checkOutYear;
+    private int checkOutMonth;
+    private int checkOutDay;
+
     static final int DATE_DIALOG_ID_FROM = 0;
     static final int DATE_DIALOG_ID_TO = 1;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        //Kiểm tra kết nối, nếu không có kết nối sẽ chạy else
+        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
+            init();
+        } else {
+            CheckConnection.showState(getApplicationContext(), StaticFinalString.INTERNET_STATE_NOTIFY);
+            finish();
+        }
+    }
+
+    //Khởi tạo các component
+    private void init() {
         // Gán các component trên giao diện
         CheckInDateDisplay = findViewById(R.id.check_in_date_picker);
         CheckOutDateDisplay = findViewById(R.id.check_out_date_picker);
 
         sp_room_type = findViewById(R.id.sp_room_type);
         sp_bed_type = findViewById(R.id.sp_bed_type);
-        sp_no_beds = findViewById(R.id.sp_no_beds);
-        sp_floor = findViewById(R.id.sp_floor);
 
+        btn_search = findViewById(R.id.btn_search);
 
         //Khởi tạo các mảng dữ liệu
         ArrayAdapter<CharSequence> arr_room_type = ArrayAdapter.createFromResource(this,
                 R.array.sp_room_type, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> arr_bed_type = ArrayAdapter.createFromResource(this,
                 R.array.sp_bed_type, android.R.layout.simple_spinner_item);
-        final ArrayAdapter<CharSequence> arr_floor = ArrayAdapter.createFromResource(this,
-                R.array.sp_floor, android.R.layout.simple_spinner_item);
-        final ArrayAdapter<CharSequence> arr_floor_vip = ArrayAdapter.createFromResource(this,
-                R.array.sp_floor_vip, android.R.layout.simple_spinner_item);
 
         //Gắn dữ liệu cho các spinner
         sp_room_type.setAdapter(arr_room_type);
         sp_bed_type.setAdapter(arr_bed_type);
-        sp_floor.setAdapter(arr_floor);
-        sp_no_beds.setAdapter(arr_floor);
 
         //Lấy ngày hiện tại
         final Calendar c = Calendar.getInstance();
@@ -71,33 +96,16 @@ public class SearchActivity extends AppCompatActivity {
         checkInMonth = c.get(Calendar.MONTH);
         checkInDay = c.get(Calendar.DAY_OF_MONTH);
 
-
         // HIển thị ngày hiện tại khi bắt đầu màn hình
         updateDisplay(CheckInDateDisplay, checkInDay, checkInMonth, checkInYear);
         updateDisplay(CheckOutDateDisplay, checkInDay, checkInMonth, checkInYear);
 
-        //Ràng buộc chọn lầu khi đã chọn phòng
-        //phòng thường từ lầu 1 đến 4
-        //vip từ 5 đến 8
-        sp_floor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (sp_room_type.getSelectedItemId() == 1) {
-                    sp_floor.setAdapter(arr_floor_vip);
-                }
-
-                if (sp_room_type.getSelectedItemId() == 0) {
-                    sp_floor.setAdapter(arr_floor);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-
+            public void onClick(View v) {
+                searching(v);
             }
         });
-
-
     }
 
 
@@ -119,7 +127,10 @@ public class SearchActivity extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            updateDisplay(CheckOutDateDisplay, dayOfMonth, monthOfYear, year);
+            checkOutYear = year;
+            checkOutMonth = monthOfYear;
+            checkOutDay = dayOfMonth;
+            updateDisplay(CheckOutDateDisplay, checkOutDay, checkOutMonth, checkOutYear);
         }
     };
 
@@ -157,7 +168,7 @@ public class SearchActivity extends AppCompatActivity {
         //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
         // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
         long checkOutMinDate =
-                dateToMiliseconds(checkInDay,checkInMonth,checkInYear) + 2592000000L + 172800000;
+                dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 172800000;
         long checkOutMaxDate = checkInMaxDate;
 
         switch (id) {
@@ -193,6 +204,75 @@ public class SearchActivity extends AppCompatActivity {
         gc.clear();
         gc.set(year, month - 1, day);
         return gc.getTimeInMillis();
+    }
+
+    //xử lý nút tìm
+    public void searching(View view) {
+        getResult();
+        if (arrRoom != null) {
+            Intent intent = new Intent(SearchActivity.this, RoomListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("LISTROOM", arrRoom);
+            intent.putExtra("BUNDLE", bundle);
+            startActivity(intent);
+        } else {
+            Toast.makeText(SearchActivity.this, link, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    //hàm lấy kết quả json, nếu có kết quả trả về true
+    public void getResult() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(filterLink(), new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onResponse(JSONArray response) {
+                if (response != null) {
+                    arrRoom = new ArrayList<RoomBom>();
+                    try {
+                        JSONArray jsonArray1 = new JSONArray("response");
+                        for (int i = 0; i < jsonArray1.length(); i++) {
+                            JSONArray jsonArray = jsonArray1.getJSONArray(0);
+                            RoomBom room =
+                                    new RoomBom(jsonArray.getString(0),
+                                            jsonArray.getString(3),
+                                            jsonArray.getString(4),
+                                            jsonArray.getInt(5));
+                            arrRoom.add(room);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener()
+
+        {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public String filterLink() {
+        int inMonth = configMonth(checkInMonth);
+        int outMonth = configMonth(checkOutMonth);
+
+        String checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
+        String checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
+
+        return link = StaticFinalString.MAIN_LINK_FILTER_GET_ROOM
+                .concat(StaticFinalString.BED_TYPE_FILTER.concat(sp_bed_type.getSelectedItem().toString()))
+                .concat(StaticFinalString.ROOM_TYPE_FILTER.concat(sp_room_type.getSelectedItem().toString()))
+                .concat(StaticFinalString.CHECK_IN_FILTER.concat(checkInDate))
+                .concat(StaticFinalString.CHECK_OUT_FILTER.concat(checkOutDate));
+    }
+
+    public int configMonth(int x) {
+        return x < 12 ? (x + 1) : x;
     }
 
 }
