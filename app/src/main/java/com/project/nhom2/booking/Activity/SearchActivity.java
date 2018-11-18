@@ -3,9 +3,7 @@ package com.project.nhom2.booking.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,6 +25,7 @@ import com.project.nhom2.booking.Util.StaticFinalString;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +41,8 @@ public class SearchActivity extends AppCompatActivity {
     Spinner sp_bed_type;
     Button btn_search;
 
-    ArrayList<RoomBom> arrRoom;
+    ArrayList<RoomBom> arrRoom  = new ArrayList<RoomBom>();
+
 
     private int checkInYear;
     private int checkInMonth;
@@ -223,22 +223,21 @@ public class SearchActivity extends AppCompatActivity {
 
     //hàm lấy kết quả json, nếu có kết quả trả về true
     public void getResult() {
+        String link = filterLink();
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(filterLink(), new Response.Listener<JSONArray>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        JsonArrayRequest stringRequest = new JsonArrayRequest(link, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 if (response != null) {
-                    arrRoom = new ArrayList<RoomBom>();
                     try {
-                        JSONArray jsonArray1 = new JSONArray("response");
-                        for (int i = 0; i < jsonArray1.length(); i++) {
-                            JSONArray jsonArray = jsonArray1.getJSONArray(0);
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
                             RoomBom room =
-                                    new RoomBom(jsonArray.getString(0),
-                                            jsonArray.getString(3),
-                                            jsonArray.getString(4),
-                                            jsonArray.getInt(5));
+                                    new RoomBom(jsonObject.getString("MaPhong"),
+                                            jsonObject1.getString("TenLoaiPhong"),
+                                            jsonObject1.getString("ChatLuong"),
+                                            jsonObject1.getInt("Gia"));
                             arrRoom.add(room);
                         }
                     } catch (JSONException e) {
@@ -254,7 +253,7 @@ public class SearchActivity extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        requestQueue.add(stringRequest);
     }
 
     public String filterLink() {

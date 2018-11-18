@@ -6,7 +6,6 @@
     tools:context=".Activity.RoomListActivity">
 
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_filter"
         layout_anchorGravity="bottom|right|end"
@@ -17,8 +16,8 @@
         android:src="@mipmap/icon_filter"
         android:onClick="openFilter"/>
 
-    <ListView
-        android:id="@+id/lvRoom"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
