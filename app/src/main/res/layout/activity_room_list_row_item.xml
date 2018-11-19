@@ -62,9 +62,6 @@
             android:layout_height="match_parent"
             android:background="@drawable/child_radius_background_white"
             android:textColor="@color/colorPrimary"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:text="@string/book"/>
     </LinearLayout>
 </LinearLayout>

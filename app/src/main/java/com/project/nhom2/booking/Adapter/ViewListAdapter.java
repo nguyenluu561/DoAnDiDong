@@ -14,16 +14,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.Activity.SearchActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
-import java.util.HashMap;
+import org.json.JSONObject;
+
 import java.util.List;
-import java.util.Map;
 
 public class ViewListAdapter extends ArrayAdapter<RoomBom> {
 
@@ -31,6 +31,7 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
     int resource;
     List<RoomBom> arrRoom;
     String roomid;
+
     //khởi tạo mảng các row của danh sách phòng
     public ViewListAdapter(Context context, int resource, List<RoomBom> arrRoomBom) {
         super(context, resource, arrRoomBom);
@@ -77,37 +78,34 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         Button btnBook;
     }
 
-    private View.OnClickListener bookBtnListener = new View.OnClickListener(){
+    private View.OnClickListener bookBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM;
-            RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, link,
-                    new Response.Listener<String>() {
+            String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM
+                    .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomid))
+                    .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
+                    .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
+            RequestQueue rq = Volley.newRequestQueue(context);
+            JSONObject params = new JSONObject();
+
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                    link, params, //Not null.
+                    new Response.Listener<JSONObject>() {
+
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(JSONObject response) {
                             Toast.makeText(context, StaticFinalString.SUCCESS_RESULT, Toast.LENGTH_LONG);
+                            // pDialog.hide();
                         }
                     }, new Response.ErrorListener() {
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG);
                 }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    params.put(StaticFinalString.ROOM_ID_FILTER, roomid);
-                    params.put(StaticFinalString.CHECK_IN_FILTER, SearchActivity.getCheckInDate());
-                    params.put(StaticFinalString.CHECK_OUT_FILTER, SearchActivity.getCheckOutDate());
-                    params.put("Cmnd", "12345678");
-                    params.put("TrangThai", "Chua nhan");
-                    return params;
-                }
-            };
-            Toast.makeText(context, "link:" + link, Toast.LENGTH_LONG);
-            queue.add(stringRequest);
+            });
+            Toast.makeText(context,"link:"+link,Toast.LENGTH_LONG);
+            rq.add(jsonObjReq);
         }
     };
-
 }
