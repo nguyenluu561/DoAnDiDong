@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/child_radius_background_orange"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:padding="5dp"
+    tools:context=".Activity.RoomListActivity">
 
     <ImageView
         android:id="@+id/ivRoom"
@@ -61,6 +62,9 @@
             android:layout_height="match_parent"
             android:background="@drawable/child_radius_background_white"
             android:textColor="@color/colorPrimary"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="@string/book"/>
     </LinearLayout>
 </LinearLayout>

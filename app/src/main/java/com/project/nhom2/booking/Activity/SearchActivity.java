@@ -45,6 +45,17 @@ public class SearchActivity extends AppCompatActivity {
 
     ArrayList<RoomBom> arrRoom;
 
+    public static String getCheckInDate() {
+        return checkInDate;
+    }
+
+    public static String getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    private static String checkInDate;
+    private static String checkOutDate;
+
     private int checkInYear;
     private int checkInMonth;
     private int checkInDay;
@@ -104,7 +115,7 @@ public class SearchActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    searching(v);
+                searching(v);
             }
         });
     }
@@ -208,16 +219,16 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     //xử lý nút tìm
-    public void searching(View view){
+    public void searching(View view) {
         getResult();
-        if (arrRoom != null) {
+        if (arrRoom!= null && arrRoom.size()!=0) {
             Intent intent = new Intent(SearchActivity.this, RoomListActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("LISTROOM", arrRoom);
             intent.putExtra("BUNDLE", bundle);
             startActivity(intent);
         } else {
-            Toast.makeText(SearchActivity.this, link, Toast.LENGTH_SHORT).show();
+            Toast.makeText(SearchActivity.this, StaticFinalString.NULL_RESULT, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -262,8 +273,8 @@ public class SearchActivity extends AppCompatActivity {
         int inMonth = configMonth(checkInMonth);
         int outMonth = configMonth(checkOutMonth);
 
-        String checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
-        String checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
+        checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
+        checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
 
         return link = StaticFinalString.MAIN_LINK_FILTER_GET_ROOM
                 .concat(StaticFinalString.BED_TYPE_FILTER.concat(sp_bed_type.getSelectedItem().toString()))

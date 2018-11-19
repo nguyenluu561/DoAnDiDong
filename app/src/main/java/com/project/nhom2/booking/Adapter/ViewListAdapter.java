@@ -16,18 +16,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.project.nhom2.booking.Activity.SearchActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewListAdapter extends ArrayAdapter<RoomBom> {
 
     Context context;
     int resource;
     List<RoomBom> arrRoom;
-
+    String roomid;
     //khởi tạo mảng các row của danh sách phòng
     public ViewListAdapter(Context context, int resource, List<RoomBom> arrRoomBom) {
         super(context, resource, arrRoomBom);
@@ -61,32 +64,9 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         viewHolder.tvBedType.setText(roomBom.getBedtype());
         viewHolder.tvRoomType.setText(roomBom.getRoomtype());
         viewHolder.tvPrice.setText(String.valueOf(roomBom.getPrice()));
-
+        roomid = roomBom.getId();
         viewHolder.ivImage.setImageResource(R.drawable.room_normal_1);
-
-        viewHolder.btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM;
-
-                RequestQueue queue = Volley.newRequestQueue(context);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, link,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(context,));
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        mTextView.setText("That didn't work!");
-                    }
-                });
-                queue.add(stringRequest);
-            }
-        });
-
+        viewHolder.btnBook.setOnClickListener(bookBtnListener);
         return convertView;
     }
 
@@ -96,4 +76,38 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         ImageView ivImage;
         Button btnBook;
     }
+
+    private View.OnClickListener bookBtnListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM;
+            RequestQueue queue = Volley.newRequestQueue(context);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, link,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(context, StaticFinalString.SUCCESS_RESULT, Toast.LENGTH_LONG);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG);
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put(StaticFinalString.ROOM_ID_FILTER, roomid);
+                    params.put(StaticFinalString.CHECK_IN_FILTER, SearchActivity.getCheckInDate());
+                    params.put(StaticFinalString.CHECK_OUT_FILTER, SearchActivity.getCheckOutDate());
+                    params.put("Cmnd", "12345678");
+                    params.put("TrangThai", "Chua nhan");
+                    return params;
+                }
+            };
+            Toast.makeText(context, "link:" + link, Toast.LENGTH_LONG);
+            queue.add(stringRequest);
+        }
+    };
+
 }
