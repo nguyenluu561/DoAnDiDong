@@ -27,6 +27,7 @@ import com.project.nhom2.booking.Util.StaticFinalString;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -231,14 +232,14 @@ public class SearchActivity extends AppCompatActivity {
                 if (response != null) {
                     arrRoom = new ArrayList<RoomBom>();
                     try {
-                        JSONArray jsonArray1 = new JSONArray("response");
-                        for (int i = 0; i < jsonArray1.length(); i++) {
-                            JSONArray jsonArray = jsonArray1.getJSONArray(0);
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
                             RoomBom room =
-                                    new RoomBom(jsonArray.getString(0),
-                                            jsonArray.getString(3),
-                                            jsonArray.getString(4),
-                                            jsonArray.getInt(5));
+                                    new RoomBom(jsonObject.getString("MaPhong"),
+                                            jsonObject1.getString("TenLoaiPhong"),
+                                            jsonObject1.getString("ChatLuong"),
+                                            jsonObject1.getInt("Gia"));
                             arrRoom.add(room);
                         }
                     } catch (JSONException e) {

@@ -48,9 +48,9 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         }
         RoomBom roomBom = arrRoom.get(position);
 
-        viewHolder.tvBedType.setText(roomBom.getType().getRoomTypeName());
-        viewHolder.tvRoomType.setText(roomBom.getType().getQuality());
-        viewHolder.tvPrice.setText(String.valueOf(roomBom.getType().getPrice()));
+        viewHolder.tvBedType.setText(roomBom.getBedtype());
+        viewHolder.tvRoomType.setText(roomBom.getRoomtype());
+        viewHolder.tvPrice.setText(String.valueOf(roomBom.getPrice()));
 
         viewHolder.ivImage.setImageResource(R.drawable.room_normal_1);
         return convertView;

@@ -16,6 +16,12 @@ public class RoomType {
         this.price = price;
     }
 
+    public RoomType(String roomTypeName, String quality, int price) {
+        RoomTypeName = roomTypeName;
+        Quality = quality;
+        this.price = price;
+    }
+
     public String getIdRoomType() {
         return IdRoomType;
     }

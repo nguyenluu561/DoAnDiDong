@@ -3,25 +3,58 @@ package com.project.nhom2.booking.Bom;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.project.nhom2.booking.Entity.RoomType;
-
 //Parcelable để có thể gửi custom object bằng bundle
 public class RoomBom implements Parcelable {
     private String id;
-    private RoomType type;
+    private String bedtype;
+    private String roomtype;
+    private int price;
 
     public RoomBom (String id, String bedType, String roomType, int price) {
         this.id = id;
-        this.type.setRoomTypeName(bedType);
-        this.type.setQuality(roomType);
-        this.type.setPrice(price);
+        this.bedtype = bedType;
+        this.roomtype = roomType;
+        this.price = price;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getBedtype() {
+        return bedtype;
+    }
+
+    public void setBedtype(String bedtype) {
+        this.bedtype = bedtype;
+    }
+
+    public String getRoomtype() {
+        return roomtype;
+    }
+
+    public void setRoomtype(String roomtype) {
+        this.roomtype = roomtype;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setId(String id) {
+
+        this.id = id;
     }
 
     protected RoomBom(Parcel in) {
-        id = in.readString();
-        this.type.setRoomTypeName(in.readString());
-        this.type.setQuality(in.readString());
-        this.type.setPrice(in.readInt());
+        this.id = in.readString();
+        this.bedtype = in.readString();
+        this.roomtype =(in.readString());
+        this.price = in.readInt();
     }
 
     public static final Creator<RoomBom> CREATOR = new Creator<RoomBom>() {
@@ -36,10 +69,6 @@ public class RoomBom implements Parcelable {
         }
     };
 
-    public RoomType getType() {
-        return this.getType();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -48,8 +77,8 @@ public class RoomBom implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(this.type.getRoomTypeName());
-        dest.writeString(this.type.getQuality());
-        dest.writeInt(this.type.getPrice());
+        dest.writeString(this.bedtype);
+        dest.writeString(this.roomtype);
+        dest.writeInt(this.price);
     }
 }
