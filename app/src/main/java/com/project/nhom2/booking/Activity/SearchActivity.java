@@ -104,7 +104,7 @@ public class SearchActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searching(v);
+                    searching(v);
             }
         });
     }
@@ -208,7 +208,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     //xử lý nút tìm
-    public void searching(View view) {
+    public void searching(View view){
         getResult();
         if (arrRoom != null) {
             Intent intent = new Intent(SearchActivity.this, RoomListActivity.class);
