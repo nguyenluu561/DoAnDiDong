@@ -3,14 +3,21 @@ package com.project.nhom2.booking.Bom;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.project.nhom2.booking.Entity.RoomType;
+
 
 //Parcelable để có thể gửi custom object bằng bundle
 public class RoomBom implements Parcelable {
+    @SerializedName("id")
+    @Expose
     private String id;
+    @SerializedName("type")
+    @Expose
     private RoomType type;
 
-    public RoomBom (String id, String bedType, String roomType, int price) {
+    public RoomBom(String id, String bedType, String roomType, int price) {
         this.id = id;
         this.type.setRoomTypeName(bedType);
         this.type.setQuality(roomType);
@@ -38,6 +45,10 @@ public class RoomBom implements Parcelable {
 
     public RoomType getType() {
         return this.getType();
+    }
+
+    public void setType(RoomType roomType) {
+        this.type = roomType;
     }
 
     @Override

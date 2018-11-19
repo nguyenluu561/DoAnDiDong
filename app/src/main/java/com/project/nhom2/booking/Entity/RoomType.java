@@ -6,13 +6,11 @@ public class RoomType {
     private String Quality;
     private int price;
 
-    public RoomType() {
-    }
 
     public RoomType(String idRoomType, String roomTypeName, String quality, int price) {
-        IdRoomType = idRoomType;
-        RoomTypeName = roomTypeName;
-        Quality = quality;
+        this.IdRoomType = idRoomType;
+        this. RoomTypeName = roomTypeName;
+        this.Quality = quality;
         this.price = price;
     }
 
@@ -29,7 +27,7 @@ public class RoomType {
     }
 
     public void setRoomTypeName(String roomTypeName) {
-        RoomTypeName = roomTypeName;
+        this.RoomTypeName = roomTypeName;
     }
 
     public String getQuality() {

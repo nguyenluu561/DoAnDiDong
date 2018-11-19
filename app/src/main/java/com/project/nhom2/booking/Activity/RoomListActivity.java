@@ -34,7 +34,6 @@ public class RoomListActivity extends AppCompatActivity {
             getResult();
             createItemList();
 
-
         } else {
             CheckConnection.showState(getApplicationContext(), StaticFinalString.INTERNET_STATE_NOTIFY);
             finish();
@@ -65,6 +64,7 @@ public class RoomListActivity extends AppCompatActivity {
         mRcvAdapter = new RecyclerViewAdapter(arrRoom);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mRcvAdapter);
     }
 
