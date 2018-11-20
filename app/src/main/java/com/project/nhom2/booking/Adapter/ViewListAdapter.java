@@ -1,6 +1,7 @@
 package com.project.nhom2.booking.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,30 +82,33 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
     private View.OnClickListener bookBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM
                     .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomid))
                     .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
                     .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
+
+            Toast.makeText(getContext(),"link:"+link,Toast.LENGTH_LONG);
+            Log.i("thongbao","link:"+link);
+
             RequestQueue rq = Volley.newRequestQueue(context);
             JSONObject params = new JSONObject();
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                    link, params, //Not null.
+                    link, params,
                     new Response.Listener<JSONObject>() {
-
                         @Override
                         public void onResponse(JSONObject response) {
-                            Toast.makeText(context, StaticFinalString.SUCCESS_RESULT, Toast.LENGTH_LONG);
-                            // pDialog.hide();
+
+                            Toast.makeText(getContext(), StaticFinalString.SUCCESS_RESULT + response.toString(), Toast.LENGTH_LONG);
                         }
                     }, new Response.ErrorListener() {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG);
                 }
             });
-            Toast.makeText(context,"link:"+link,Toast.LENGTH_LONG);
             rq.add(jsonObjReq);
         }
     };

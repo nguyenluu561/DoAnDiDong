@@ -6,6 +6,7 @@
     android:background="@drawable/child_radius_background_orange"
     android:orientation="horizontal"
     android:padding="5dp"
+    android:descendantFocusability="beforeDescendants"
     tools:context=".Activity.RoomListActivity">
 
     <ImageView
