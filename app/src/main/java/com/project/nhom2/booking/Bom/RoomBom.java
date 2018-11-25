@@ -25,16 +25,8 @@ public class RoomBom implements Parcelable {
         return bedtype;
     }
 
-    public void setBedtype(String bedtype) {
-        this.bedtype = bedtype;
-    }
-
     public String getRoomtype() {
         return roomtype;
-    }
-
-    public void setRoomtype(String roomtype) {
-        this.roomtype = roomtype;
     }
 
     public int getPrice() {
@@ -50,7 +42,7 @@ public class RoomBom implements Parcelable {
         this.id = id;
     }
 
-    protected RoomBom(Parcel in) {
+    private RoomBom(Parcel in) {
         this.id = in.readString();
         this.bedtype = in.readString();
         this.roomtype =(in.readString());

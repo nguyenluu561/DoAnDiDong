@@ -5,7 +5,9 @@
     <color name="colorLight">#4A6572</color>
 
     <color name="colorSecondary">#F9AA33</color>
-
     <color name="onBackground">#FFFFFF</color>
+
+    <color name="white">#D0D0D0</color>
+    <color name="orangeDark">#FF9900</color>
 
 </resources>

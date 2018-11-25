@@ -2,30 +2,27 @@ package com.project.nhom2.booking.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.project.nhom2.booking.Adapter.ViewListAdapter;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.CheckConnection;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,8 +39,9 @@ public class SearchActivity extends AppCompatActivity {
     Spinner sp_room_type;
     Spinner sp_bed_type;
     Button btn_search;
+    ListView lvRoom;
 
-    ArrayList<RoomBom> arrRoom;
+    ArrayList<RoomBom> arrRoom = new ArrayList<>();
 
     public static String getCheckInDate() {
         return checkInDate;
@@ -83,6 +81,7 @@ public class SearchActivity extends AppCompatActivity {
 
     //Khởi tạo các component
     private void init() {
+
         // Gán các component trên giao diện
         CheckInDateDisplay = findViewById(R.id.check_in_date_picker);
         CheckOutDateDisplay = findViewById(R.id.check_out_date_picker);
@@ -92,11 +91,13 @@ public class SearchActivity extends AppCompatActivity {
 
         btn_search = findViewById(R.id.btn_search);
 
+        lvRoom = findViewById(R.id.lvRoom);
+
         //Khởi tạo các mảng dữ liệu
-        ArrayAdapter<CharSequence> arr_room_type = ArrayAdapter.createFromResource(this,
-                R.array.sp_room_type, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> arr_bed_type = ArrayAdapter.createFromResource(this,
-                R.array.sp_bed_type, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> arr_room_type =
+                ArrayAdapter.createFromResource(this, R.array.sp_room_type, R.layout.spinner_item);
+        ArrayAdapter<CharSequence> arr_bed_type =
+                ArrayAdapter.createFromResource(this, R.array.sp_bed_type, R.layout.spinner_item);
 
         //Gắn dữ liệu cho các spinner
         sp_room_type.setAdapter(arr_room_type);
@@ -112,20 +113,14 @@ public class SearchActivity extends AppCompatActivity {
         updateDisplay(CheckInDateDisplay, checkInDay, checkInMonth, checkInYear);
         updateDisplay(CheckOutDateDisplay, checkInDay, checkInMonth, checkInYear);
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searching(v);
-            }
-        });
+        btn_search.setOnClickListener(this::searching);
     }
 
 
     //Biến nhận xử lý sự kiện  khi ấn vào ngày đặt phòng
     private DatePickerDialog.OnDateSetListener checkInDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             checkInYear = year;
             checkInMonth = monthOfYear;
             checkInDay = dayOfMonth;
@@ -181,7 +176,6 @@ public class SearchActivity extends AppCompatActivity {
         // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
         long checkOutMinDate =
                 dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 172800000;
-        long checkOutMaxDate = checkInMaxDate;
 
         switch (id) {
             case DATE_DIALOG_ID_FROM:
@@ -201,7 +195,7 @@ public class SearchActivity extends AppCompatActivity {
                                 checkInDay);
 
                 toDatePickerDialog.getDatePicker().setMinDate(checkOutMinDate);
-                toDatePickerDialog.getDatePicker().setMaxDate(checkOutMaxDate);
+                toDatePickerDialog.getDatePicker().setMaxDate(checkInMaxDate);
 
                 return toDatePickerDialog;
         }
@@ -218,57 +212,7 @@ public class SearchActivity extends AppCompatActivity {
         return gc.getTimeInMillis();
     }
 
-    //xử lý nút tìm
-    public void searching(View view) {
-        getResult();
-        if (arrRoom!= null && arrRoom.size()!=0) {
-            Intent intent = new Intent(SearchActivity.this, RoomListActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("LISTROOM", arrRoom);
-            intent.putExtra("BUNDLE", bundle);
-            startActivity(intent);
-        } else {
-            Toast.makeText(SearchActivity.this, StaticFinalString.NULL_RESULT, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    //hàm lấy kết quả json, nếu có kết quả trả về true
-    public void getResult() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(filterLink(), new Response.Listener<JSONArray>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onResponse(JSONArray response) {
-                if (response != null) {
-                    arrRoom = new ArrayList<RoomBom>();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
-                            RoomBom room =
-                                    new RoomBom(jsonObject.getString("MaPhong"),
-                                            jsonObject1.getString("TenLoaiPhong"),
-                                            jsonObject1.getString("ChatLuong"),
-                                            jsonObject1.getInt("Gia"));
-                            arrRoom.add(room);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, new Response.ErrorListener()
-
-        {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        requestQueue.add(jsonArrayRequest);
-    }
-
+    //Lấy link từ các thuộc tính lọc
     public String filterLink() {
         int inMonth = configMonth(checkInMonth);
         int outMonth = configMonth(checkOutMonth);
@@ -285,6 +229,46 @@ public class SearchActivity extends AppCompatActivity {
 
     public int configMonth(int x) {
         return x < 12 ? (x + 1) : x;
+    }
+
+    //xử lý nút tìm
+    public void searching(View view) {
+        getResult();
+        if (arrRoom != null && arrRoom.size() != 0) {
+            ViewListAdapter customAdapter
+                    = new ViewListAdapter(this, R.layout.activity_room_list_row_item, arrRoom);
+            lvRoom.setAdapter(customAdapter);
+        } else {
+            Toast.makeText(this, StaticFinalString.NULL_RESULT, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //hàm lấy kết quả json
+    public void getResult() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(filterLink(), response -> {
+            if (response != null) {
+                arrRoom.clear();
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
+                        RoomBom room =
+                                new RoomBom(jsonObject.getString("MaPhong"),
+                                        jsonObject1.getString("TenLoaiPhong"),
+                                        jsonObject1.getString("ChatLuong"),
+                                        jsonObject1.getInt("Gia"));
+                        arrRoom.add(room);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Throwable::printStackTrace);
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy
+                (20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonArrayRequest);
     }
 
 }

@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.Activity.SearchActivity;
@@ -28,10 +26,10 @@ import java.util.List;
 
 public class ViewListAdapter extends ArrayAdapter<RoomBom> {
 
-    Context context;
-    int resource;
-    List<RoomBom> arrRoom;
-    String roomid;
+    private Context context;
+    private int resource;
+    private List<RoomBom> arrRoom;
+    private String roomid;
 
     //khởi tạo mảng các row của danh sách phòng
     public ViewListAdapter(Context context, int resource, List<RoomBom> arrRoomBom) {
@@ -51,11 +49,11 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
 
             convertView = LayoutInflater.from(context).inflate(R.layout.activity_room_list_row_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.price);
-            viewHolder.tvBedType = (TextView) convertView.findViewById(R.id.bed_type);
-            viewHolder.tvRoomType = (TextView) convertView.findViewById(R.id.room_type);
-            viewHolder.ivImage = (ImageView) convertView.findViewById(R.id.ivRoom);
-            viewHolder.btnBook = (Button) convertView.findViewById(R.id.btn_book);
+            viewHolder.tvPrice = convertView.findViewById(R.id.price);
+            viewHolder.tvBedType = convertView.findViewById(R.id.bed_type);
+            viewHolder.tvRoomType = convertView.findViewById(R.id.room_type);
+            viewHolder.ivImage = convertView.findViewById(R.id.ivRoom);
+            viewHolder.btnBook = convertView.findViewById(R.id.btn_book);
 
             convertView.setTag(viewHolder);
         } else {
@@ -72,6 +70,14 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         return convertView;
     }
 
+    public int getResource() {
+        return resource;
+    }
+
+    public void setResource(int resource) {
+        this.resource = resource;
+    }
+
     //khởi tạo các biến nắm nội dung hiển thị của một row
     public class ViewHolder {
         TextView tvBedType, tvRoomType, tvPrice;
@@ -79,37 +85,28 @@ public class ViewListAdapter extends ArrayAdapter<RoomBom> {
         Button btnBook;
     }
 
+    public String getLink() {
+        return StaticFinalString.MAIN_LINK_FILTER_POST_ROOM
+                .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomid))
+                .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
+                .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
+    }
+
     private View.OnClickListener bookBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            String link = StaticFinalString.MAIN_LINK_FILTER_POST_ROOM
-                    .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomid))
-                    .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
-                    .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
-
-            Toast.makeText(getContext(),"link:"+link,Toast.LENGTH_LONG);
-            Log.i("thongbao","link:"+link);
-
-            RequestQueue rq = Volley.newRequestQueue(context);
+            Log.i("thongbao", "link:" + getLink());
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
             JSONObject params = new JSONObject();
-
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                    link, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            Toast.makeText(getContext(), StaticFinalString.SUCCESS_RESULT + response.toString(), Toast.LENGTH_LONG);
-                        }
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getContext(), StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG);
-                }
-            });
-            rq.add(jsonObjReq);
+                    getLink(), params,
+                    response -> Toast.makeText(getContext()
+                            , StaticFinalString.SUCCESS_RESULT + response.toString()
+                            , Toast.LENGTH_LONG).show()
+                    , error -> Toast.makeText(getContext()
+                    , StaticFinalString.FAILURE_RESULT
+                    , Toast.LENGTH_LONG).show());
+            requestQueue.add(jsonObjReq);
         }
     };
 }
