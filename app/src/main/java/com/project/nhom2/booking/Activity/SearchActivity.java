@@ -253,11 +253,11 @@ public class SearchActivity extends AppCompatActivity {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
-                        RoomBom room =
-                                new RoomBom(jsonObject.getString("MaPhong"),
-                                        jsonObject1.getString("TenLoaiPhong"),
-                                        jsonObject1.getString("ChatLuong"),
-                                        jsonObject1.getInt("Gia"));
+                        RoomBom room = RoomBom.builder()
+                                .id(jsonObject.getString("MaPhong"))
+                                .bedtype(jsonObject1.getString("TenLoaiPhong"))
+                                .roomtype(jsonObject1.getString("ChatLuong"))
+                                .price( jsonObject1.getInt("Gia")).build();
                         arrRoom.add(room);
                     }
                 } catch (JSONException e) {

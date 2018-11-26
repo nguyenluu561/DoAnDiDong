@@ -8,8 +8,6 @@
     <string name="bed_type">Loại giường</string>
     <string name="check_in">Ngày đến</string>
     <string name="check_out">Ngày đi</string>
-    <string name="no_customers">Số người</string>
-    <string name="no_beds">Số giường</string>
     <string name="price">Khoảng giá</string>
     <string name="bed1">Giường đôi</string>
     <string name="bed2">Giường đơn</string>
@@ -42,7 +40,6 @@
     <string name="password">Mật khẩu</string>
 
 
-
     <string name="signin">Đăng nhập</string>
     <string name="signup1">Chưa có tài khoản? Đăng kí</string>
     <string name="signup2">Đăng kí</string>
@@ -51,6 +48,12 @@
     <string name="_2">2</string>
     <string name="vip">VIP</string>
     <string name="phong">Phòng</string>
+
+    <string name="title_activity_report">ReportActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="string1">Cả hai</string>
+    <string name="report">Thống kê</string>
 
 
 </resources>

@@ -16,11 +16,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //fix META-INF/proguard/androidx-annotations.pro when use lombok
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+
     buildToolsVersion '28.0.3'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -29,7 +39,13 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.volley:volley:1.1.+'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    //lombok 1.18.4: issue runtimeException
+    //noinspection GradleDependency
+    implementation "org.projectlombok:lombok:1.16.20"
+    //noinspection GradleDependency
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
