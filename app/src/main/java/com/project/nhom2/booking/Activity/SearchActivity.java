@@ -1,7 +1,10 @@
 package com.project.nhom2.booking.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +14,8 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,27 +23,28 @@ import com.project.nhom2.booking.Adapter.ViewListAdapter;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.CheckConnection;
+import com.project.nhom2.booking.Util.DateTime;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class SearchActivity extends AppCompatActivity {
 
     String link;
-    TextView CheckInDateDisplay;
-    TextView CheckOutDateDisplay;
-    Spinner sp_room_type;
-    Spinner sp_bed_type;
-    Button btn_search;
+    TextView CheckInDateDisplay, CheckOutDateDisplay;
+    Spinner sp_room_type, sp_bed_type;
     ListView lvRoom;
 
     ArrayList<RoomBom> arrRoom = new ArrayList<>();
+
+    ViewListAdapter customAdapter;
+
+    Button btnUser, btnBill;
 
     public static String getCheckInDate() {
         return checkInDate;
@@ -62,6 +65,14 @@ public class SearchActivity extends AppCompatActivity {
     private int checkOutMonth;
     private int checkOutDay;
 
+    //ngày nhỏ nhất và khoảng thời gian dài nhất có thể đặt phòng
+    private long checkInMinDate = System.currentTimeMillis();
+    //cho phép đặt phòng sớm nhất là trước 3 tháng tính từ thời điểm hiện tại
+    private long checkInMaxDate = System.currentTimeMillis() + 7889238000L;
+
+    //ngày nhỏ nhất có thể trả phòng
+    long checkOutMinDate;
+
     static final int DATE_DIALOG_ID_FROM = 0;
     static final int DATE_DIALOG_ID_TO = 1;
 
@@ -70,7 +81,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        //Kiểm tra kết nối, nếu không có kết nối sẽ chạy else
+        //Kiểm tra kết nối
         if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
             init();
         } else {
@@ -89,7 +100,9 @@ public class SearchActivity extends AppCompatActivity {
         sp_room_type = findViewById(R.id.sp_room_type);
         sp_bed_type = findViewById(R.id.sp_bed_type);
 
-        btn_search = findViewById(R.id.btn_search);
+        final Button btn_search = findViewById(R.id.btn_search);
+        btnUser = findViewById(R.id.menu_user);
+        btnBill = findViewById(R.id.menu_bill);
 
         lvRoom = findViewById(R.id.lvRoom);
 
@@ -113,7 +126,24 @@ public class SearchActivity extends AppCompatActivity {
         updateDisplay(CheckInDateDisplay, checkInDay, checkInMonth, checkInYear);
         updateDisplay(CheckOutDateDisplay, checkInDay, checkInMonth, checkInYear);
 
-        btn_search.setOnClickListener(this::searching);
+        customAdapter
+                = new ViewListAdapter(this, R.layout.activity_room_list_row_item, arrRoom);
+
+        btn_search.setOnClickListener(v -> new HttpGetTask().execute());
+        btnUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
@@ -124,6 +154,7 @@ public class SearchActivity extends AppCompatActivity {
             checkInYear = year;
             checkInMonth = monthOfYear;
             checkInDay = dayOfMonth;
+            setCheckOutMinDate();
             updateDisplay(CheckInDateDisplay, checkInDay, checkInMonth, checkInYear);
         }
     };
@@ -165,18 +196,7 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
-
-        //ngày nhỏ nhất và khoảng thời gian dài nhất có thể đặt phòng
-        long checkInMinDate = System.currentTimeMillis();
-        //cho phép đặt phòng sớm nhất là trước 3 tháng tính từ thời điểm hiện tại
-        long checkInMaxDate = System.currentTimeMillis() + 7889238000L;
-
-        //ngày nhỏ nhất và khoảng thời gian dài nhất có thể trả phòng
-        //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
-        // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
-        long checkOutMinDate =
-                dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 172800000;
-
+        setCheckOutMinDate();
         switch (id) {
             case DATE_DIALOG_ID_FROM:
                 DatePickerDialog fromDatePickerDialog = new DatePickerDialog
@@ -202,20 +222,17 @@ public class SearchActivity extends AppCompatActivity {
         return null;
     }
 
-
-    // chuyển mốc thời gian đặt phòng thành miliseconds
-    private long dateToMiliseconds(int day, int month, int year) {
-
-        GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        gc.clear();
-        gc.set(year, month - 1, day);
-        return gc.getTimeInMillis();
+    public void setCheckOutMinDate () {
+        //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
+        // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
+        checkOutMinDate =
+                DateTime.dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 172800000;
     }
 
     //Lấy link từ các thuộc tính lọc
     public String filterLink() {
-        int inMonth = configMonth(checkInMonth);
-        int outMonth = configMonth(checkOutMonth);
+        int inMonth = DateTime.configMonth(checkInMonth);
+        int outMonth = DateTime.configMonth(checkOutMonth);
 
         checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
         checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
@@ -227,48 +244,46 @@ public class SearchActivity extends AppCompatActivity {
                 .concat(StaticFinalString.CHECK_OUT_FILTER.concat(checkOutDate));
     }
 
-    public int configMonth(int x) {
-        return x < 12 ? (x + 1) : x;
-    }
-
-    //xử lý nút tìm
-    public void searching(View view) {
-        getResult();
-        if (arrRoom != null && arrRoom.size() != 0) {
-            ViewListAdapter customAdapter
-                    = new ViewListAdapter(this, R.layout.activity_room_list_row_item, arrRoom);
-            lvRoom.setAdapter(customAdapter);
-        } else {
-            Toast.makeText(this, StaticFinalString.NULL_RESULT, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //hàm lấy kết quả json
-    public void getResult() {
+    @SuppressLint("StaticFieldLeak")
+    private class HttpGetTask extends AsyncTask<Void, Void, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(filterLink(), response -> {
-            if (response != null) {
+        int selection = 0;
+
+        @Override
+        protected String doInBackground(Void... params) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                    , filterLink(),null, response -> {
                 arrRoom.clear();
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
-                        RoomBom room = RoomBom.builder()
-                                .id(jsonObject.getString("MaPhong"))
-                                .bedtype(jsonObject1.getString("TenLoaiPhong"))
-                                .roomtype(jsonObject1.getString("ChatLuong"))
-                                .price( jsonObject1.getInt("Gia")).build();
-                        arrRoom.add(room);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                responseHandler(response);
+            }, Throwable::printStackTrace);
+            requestQueue.add(jsonArrayRequest);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (selection == 1) {
+                lvRoom.setAdapter(customAdapter);
             }
-        }, Throwable::printStackTrace);
-        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy
-                (20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonArrayRequest);
+        }
+
+        private void responseHandler(JSONArray response) {
+            try {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject jsonObject = response.getJSONObject(i);
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
+                    RoomBom room = RoomBom.builder()
+                            .id(jsonObject.getString("MaPhong"))
+                            .bedtype(jsonObject1.getString("TenLoaiPhong"))
+                            .roomtype(jsonObject1.getString("ChatLuong"))
+                            .price(jsonObject1.getInt("Gia")).build();
+                    arrRoom.add(room);
+                    selection = 1;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

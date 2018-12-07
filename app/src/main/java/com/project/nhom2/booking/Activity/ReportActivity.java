@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.T;
 
 import java.util.ArrayList;
 
@@ -15,7 +14,6 @@ public class ReportActivity extends AppCompatActivity {
     ArrayList<String> xValsBedType = new ArrayList<String>();
     ArrayList<String> xValsQualityType = new ArrayList<String>();
     ArrayList<String> xValsRoomType = new ArrayList<String>();
-    ArrayList<T> yVals = new ArrayList<T>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

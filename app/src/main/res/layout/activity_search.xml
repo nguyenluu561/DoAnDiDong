@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +17,7 @@
             android:id="@+id/linear_layout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:background="@drawable/child_radius_background_primary"
             android:orientation="vertical">
 
@@ -167,15 +170,46 @@
         <ListView
             android:id="@+id/lvRoom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_weight="3"
+            android:layout_height="0dp" />
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_filter"
-        layout_anchorGravity="bottom|right|end"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:menu_colorNormal="@color/colorSecondary"
+        app:menu_colorPressed="@color/onBackground"
+        app:menu_colorRipple="@color/colorSecondary"
+        app:menu_labels_colorNormal="@color/onBackground"
+        app:menu_labels_colorPressed="@color/colorSecondary"
+        app:menu_labels_colorRipple="@color/onBackground"
+        fab:menu_animationDelayPerItem="0"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@mipmap/icon_user" />
+        fab:menu_labels_hideAnimation="@anim/jump_to_down"
+        fab:menu_labels_showAnimation="@anim/jump_from_down">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_user2" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_bill" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_allRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_option" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
 </android.support.design.widget.CoordinatorLayout>

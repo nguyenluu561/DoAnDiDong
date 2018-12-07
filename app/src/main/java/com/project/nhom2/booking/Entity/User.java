@@ -12,5 +12,4 @@ public class User {
     private String PhoneNumber;
     private String IdUserType;
 
-
 }
