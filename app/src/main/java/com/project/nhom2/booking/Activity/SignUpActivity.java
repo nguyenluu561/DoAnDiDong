@@ -15,7 +15,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.CheckConnection;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -28,7 +27,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
             init();
             btnSignUP.setOnClickListener(v -> {
                 getLink();
@@ -36,12 +34,6 @@ public class SignUpActivity extends AppCompatActivity {
                 new HttpGetTask().execute();
             });
 
-
-
-        } else {
-            CheckConnection.showState(getApplicationContext(), StaticFinalString.INTERNET_STATE_NOTIFY);
-            finish();
-        }
     }
 
     private void init () {

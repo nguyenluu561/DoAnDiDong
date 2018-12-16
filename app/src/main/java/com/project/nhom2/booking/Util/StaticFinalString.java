@@ -4,7 +4,7 @@ public class StaticFinalString {
     public static final String INTERNET_STATE_NOTIFY = "Kiểm tra kết nối internet";
 
     public static final String MAIN_LINK_FILTER_GET_ROOM = "https://datphong12.000webhostapp.com/phong.php?";
-    public static final String MAIN_LINK_FILTER_POST_ROOM = "https://datphong12.000webhostapp.com/datphong.php?Cmnd=1234567890&TrangThai=chua%20nhan";
+    public static final String MAIN_LINK_FILTER_BOOK_ROOM = "https://datphong12.000webhostapp.com/datphong.php?TrangThai=chua%20nhan&";
 
     public static final String BED_TYPE_FILTER = "TenLoaiPhong=";
     public static final String ROOM_TYPE_FILTER = "&ChatLuong=";
@@ -14,6 +14,7 @@ public class StaticFinalString {
     public static final String NAME_FIELD = "&HoTen=";
     public static final String PHONENUMBER_FIELD = "&SoDT=";
     public static final String PASSWORD_FIELD ="&MatKhau=";
+    public static final String ID_FIELD ="&Cmnd=";
 
 
     public static final String NULL_RESULT ="Không có phòng thoả điều kiện";

@@ -7,26 +7,28 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.project.nhom2.booking.Adapter.ViewListAdapter;
+import com.github.clans.fab.FloatingActionButton;
+import com.project.nhom2.booking.Adapter.RoomListAdapterSearchActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.CheckConnection;
 import com.project.nhom2.booking.Util.DateTime;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,16 +37,22 @@ import java.util.Calendar;
 
 public class SearchActivity extends AppCompatActivity {
 
-    String link;
+    @SuppressLint("StaticFieldLeak")
+    public static ProgressBar mProgressBar;
+    public static int mDelay = 500;
+
     TextView CheckInDateDisplay, CheckOutDateDisplay;
     Spinner sp_room_type, sp_bed_type;
     ListView lvRoom;
 
-    ArrayList<RoomBom> arrRoom = new ArrayList<>();
+    public static ArrayList<RoomBom> arrRoom = new ArrayList<>();
 
-    ViewListAdapter customAdapter;
+    @SuppressLint("StaticFieldLeak")
+    public static RoomListAdapterSearchActivity customAdapter;
 
-    Button btnUser, btnBill;
+    FloatingActionButton btnUser, btnBill;
+
+    Button btn_search;
 
     public static String getCheckInDate() {
         return checkInDate;
@@ -80,14 +88,8 @@ public class SearchActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        init();
 
-        //Kiểm tra kết nối
-        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
-            init();
-        } else {
-            CheckConnection.showState(getApplicationContext(), StaticFinalString.INTERNET_STATE_NOTIFY);
-            finish();
-        }
     }
 
     //Khởi tạo các component
@@ -100,11 +102,13 @@ public class SearchActivity extends AppCompatActivity {
         sp_room_type = findViewById(R.id.sp_room_type);
         sp_bed_type = findViewById(R.id.sp_bed_type);
 
-        final Button btn_search = findViewById(R.id.btn_search);
+        btn_search = findViewById(R.id.btn_search);
         btnUser = findViewById(R.id.menu_user);
         btnBill = findViewById(R.id.menu_bill);
 
         lvRoom = findViewById(R.id.lvRoom);
+
+        mProgressBar = findViewById(R.id.progressBar);
 
         //Khởi tạo các mảng dữ liệu
         ArrayAdapter<CharSequence> arr_room_type =
@@ -127,23 +131,22 @@ public class SearchActivity extends AppCompatActivity {
         updateDisplay(CheckOutDateDisplay, checkInDay, checkInMonth, checkInYear);
 
         customAdapter
-                = new ViewListAdapter(this, R.layout.activity_room_list_row_item, arrRoom);
+                = new RoomListAdapterSearchActivity(this, R.layout.activity_room_list_row_item, arrRoom);
+        customAdapter.notifyDataSetChanged();
 
-        btn_search.setOnClickListener(v -> new HttpGetTask().execute());
-        btnUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
-                startActivity(intent);
-            }
+        btn_search.setOnClickListener(v -> new HttpGetTask().execute(1));
+
+        btnBill.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, RoomOptionActivity.class);
+            startActivity(intent);
         });
 
-        btnBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
+        btnUser.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
+            startActivity(intent);
         });
+
+
     }
 
 
@@ -222,11 +225,11 @@ public class SearchActivity extends AppCompatActivity {
         return null;
     }
 
-    public void setCheckOutMinDate () {
+    public void setCheckOutMinDate() {
         //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
         // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
         checkOutMinDate =
-                DateTime.dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 172800000;
+                DateTime.dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L;
     }
 
     //Lấy link từ các thuộc tính lọc
@@ -237,53 +240,90 @@ public class SearchActivity extends AppCompatActivity {
         checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
         checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
 
-        return link = StaticFinalString.MAIN_LINK_FILTER_GET_ROOM
+        String link = StaticFinalString.MAIN_LINK_FILTER_GET_ROOM
                 .concat(StaticFinalString.BED_TYPE_FILTER.concat(sp_bed_type.getSelectedItem().toString()))
                 .concat(StaticFinalString.ROOM_TYPE_FILTER.concat(sp_room_type.getSelectedItem().toString()))
                 .concat(StaticFinalString.CHECK_IN_FILTER.concat(checkInDate))
                 .concat(StaticFinalString.CHECK_OUT_FILTER.concat(checkOutDate));
+        Log.i("here is link", link);
+        return link;
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class HttpGetTask extends AsyncTask<Void, Void, String> {
+    private class HttpGetTask extends AsyncTask<Integer, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        int selection = 0;
 
         @Override
-        protected String doInBackground(Void... params) {
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
-                    , filterLink(),null, response -> {
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            final String[] result = new String[1];
+            if (params.length == 1) {
                 arrRoom.clear();
-                responseHandler(response);
-            }, Throwable::printStackTrace);
-            requestQueue.add(jsonArrayRequest);
+                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                        , filterLink(), null, response -> {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
+                            RoomBom room = RoomBom.builder()
+                                    .id(jsonObject.getString("MaPhong"))
+                                    .bedtype(jsonObject1.getString("TenLoaiPhong"))
+                                    .roomtype(jsonObject1.getString("ChatLuong"))
+                                    .price(jsonObject1.getInt("Gia")).build();
+                            arrRoom.add(room);
+                            result[0] = response.toString();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace);
+
+                requestQueue.add(jsonArrayRequest);
+
+                for (int x = 1; x < 11; x++) {
+                    sleep();
+                    publishProgress(x * 10);
+                }
+
+                return result[0];
+            } else {
+
+            }
+
             return null;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            mProgressBar.setProgress(values[0]);
+        }
+
+        @Override
         protected void onPostExecute(String result) {
-            if (selection == 1) {
-                lvRoom.setAdapter(customAdapter);
+
+            if (result.equals("1")) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                if (arrRoom.size() != 0) {
+                    lvRoom.setAdapter(customAdapter);
+                } else
+                    Toast.makeText(getApplicationContext(),result , Toast.LENGTH_LONG).show();
+            } else {
+
             }
         }
 
-        private void responseHandler(JSONArray response) {
+        private void sleep() {
             try {
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject jsonObject = response.getJSONObject(i);
-                    JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
-                    RoomBom room = RoomBom.builder()
-                            .id(jsonObject.getString("MaPhong"))
-                            .bedtype(jsonObject1.getString("TenLoaiPhong"))
-                            .roomtype(jsonObject1.getString("ChatLuong"))
-                            .price(jsonObject1.getInt("Gia")).build();
-                    arrRoom.add(room);
-                    selection = 1;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                Thread.sleep(mDelay);
+            } catch (InterruptedException e) {
+                Log.e("ngủ", e.toString());
             }
         }
+
     }
 
 }

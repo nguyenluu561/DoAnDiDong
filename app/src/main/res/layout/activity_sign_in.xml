@@ -15,10 +15,10 @@ android:fitsSystemWindows="true">
     android:paddingRight="24dp">
 
     <ImageView
-        android:src="@drawable/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
         android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo"
         tools:ignore="ContentDescription" />
 
     <android.support.design.widget.TextInputLayout
@@ -60,6 +60,17 @@ android:fitsSystemWindows="true">
         android:text="@string/signin"
         tools:targetApi="lollipop" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="5dip"
+        android:minHeight="5dip"
+        android:visibility="invisible"
+        tools:targetApi="lollipop">
+    </ProgressBar>
+
     <TextView android:id="@+id/link_signup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -67,7 +78,18 @@ android:fitsSystemWindows="true">
         android:text="@string/signup1"
         android:gravity="center"
         android:clickable="true"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:focusable="true" />
+
+    <TextView android:id="@+id/link_search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/searchRoom"
+        android:gravity="center"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:focusable="true" />
 
 </LinearLayout>
 </LinearLayout>

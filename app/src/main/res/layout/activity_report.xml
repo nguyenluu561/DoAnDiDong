@@ -9,55 +9,40 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/report"
         android:background="@color/colorPrimary"
-        android:textColor="@color/colorSecondary"
         android:padding="10dp"
+        android:text="@string/report"
+        android:textColor="@color/colorSecondary"
         android:textSize="40sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <LinearLayout
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_execute"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:backgroundTint="@color/orangeDark"
+        android:padding="12dp"
+        android:textSize="20sp"
+        android:text="@string/report"
+        tools:targetApi="lollipop" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_bedtype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/orangeDark"
-            android:padding="12dp"
-            android:text="@string/bed_type"
-            tools:targetApi="lollipop" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_roomtype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/orangeDark"
-            android:padding="12dp"
-            android:text="@string/room_type"
-            tools:targetApi="lollipop" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_qualitytype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/orangeDark"
-            android:padding="12dp"
-            android:text="@string/string1"
-            tools:targetApi="lollipop" />
-
-    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="5dip"
+        android:minHeight="5dip"
+        android:visibility="invisible"
+        tools:targetApi="lollipop" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/piechart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/report"/>
+        android:contentDescription="@string/report" />
 
 
 </android.support.v7.widget.LinearLayoutCompat>

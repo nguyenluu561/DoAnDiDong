@@ -54,6 +54,11 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="string1">Cả hai</string>
     <string name="report">Thống kê</string>
+    <string name="searchRoom">Tìm phòng</string>
+    <string name="INPUT_ID">Nhập chứng minh nhân dân</string>
+    <string name="all_room">Tất cả phòng</string>
+    <string name="optionRoom1">Nhận phòng</string>
+    <string name="optionRoom2">Trả phòng</string>
 
 
 </resources>

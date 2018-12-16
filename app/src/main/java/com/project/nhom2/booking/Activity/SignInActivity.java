@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +18,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.Bom.UserBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.CheckConnection;
 import com.project.nhom2.booking.Util.StaticFinalString;
 
 import org.json.JSONException;
@@ -30,18 +30,19 @@ public class SignInActivity extends AppCompatActivity {
     TextView tv_signup;
     String link;
     public static UserBom userBom;
+    static int selection = 2;
+    @SuppressLint("StaticFieldLeak")
+    public static ProgressBar mProgressBar;
+    public static int mDelay = 500;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
-            init();
-        } else {
-            CheckConnection.showState(getApplicationContext(), StaticFinalString.INTERNET_STATE_NOTIFY);
-            finish();
-        }
+        init();
 
     }
 
@@ -49,7 +50,11 @@ public class SignInActivity extends AppCompatActivity {
         et_username = findViewById(R.id.input_username);
         et_password = findViewById(R.id.input_password);
         tv_signup = findViewById(R.id.link_signup);
+        mProgressBar = findViewById(R.id.progressBar);
+
         final AppCompatButton btn_signin = findViewById(R.id.btn_login);
+
+        userBom = new UserBom("a","b","c",1);
 
         btn_signin.setOnClickListener(v -> {
             if (!checkNull()) {
@@ -63,26 +68,45 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class HttpGetTask extends AsyncTask<Void, Void, String> {
-        int selection = 2;
+    private class HttpGetTask extends AsyncTask<Void, Integer, String> {
+
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String result = "abc";
+
+        @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(Void... params) {
             requestQueue.start();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, link, null
                     , response -> {
-                responseHandler(response);
-                result = result.concat(response.toString());
+                try {
+                    responseHandler(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }, error -> {
             });
             requestQueue.add(jsonObjectRequest);
-            return result;
+
+            for (int x = 1; x < 11; x++) {
+                sleep();
+                publishProgress(x * 10);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            mProgressBar.setProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(String result) {
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
             if (selection == 1) {
                 Intent intent = new Intent(SignInActivity.this, SearchActivity.class);
                 startActivity(intent);
@@ -92,17 +116,21 @@ public class SignInActivity extends AppCompatActivity {
 
         }
 
-        private void responseHandler(JSONObject response) {
+        private void sleep() {
             try {
-                userBom = UserBom.builder()
-                        .cmnd(response.getString("Cmnd"))
-                        .name(response.getString("HoTen"))
-                        .phoneNumber(response.getString("SoDT"))
-                        .userType(response.getInt("LoaiUser")).build();
-                selection = 1;
-            } catch (JSONException e) {
-                e.printStackTrace();
+                Thread.sleep(mDelay);
+            } catch (InterruptedException e) {
+                Log.e("ngủ", e.toString());
             }
+        }
+
+        private void responseHandler(JSONObject response) throws JSONException {
+            selection = 1;
+            userBom.setCmnd(response.getString("Cmnd"));
+            userBom.setName(response.getString("HoTen"));
+            userBom.setPhoneNumber(response.getString("SoDT"));
+            userBom.setUserType(response.getInt("LoaiUser"));
+
         }
     }
 
