@@ -29,13 +29,13 @@ public class RoomOptionActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static ProgressBar mProgressBar;
 
-    String linkGetRoom = PSFString.GET_ONE_ROOM;
-    String linkRequestRoom = PSFString.REQUEST_ROOM;
+    String linkGetRoom;
+    String linkRequestRoom;
 
-    EditText etRoomID;
+    EditText etRoomID, etCost;
     TextView tvRoomID, tvStatus, tvRoom, tvBed;
     Button btnInput, btnRequest;
-    FloatingActionButton btnReport;
+    FloatingActionButton btnReport, btnBack, btnLogOut;
     LinearLayout layout;
 
 
@@ -47,6 +47,7 @@ public class RoomOptionActivity extends AppCompatActivity {
         init();
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
 
         tvRoomID = findViewById(R.id.idRoom);
@@ -54,21 +55,43 @@ public class RoomOptionActivity extends AppCompatActivity {
         tvBed = findViewById(R.id.bed_type);
         tvRoom = findViewById(R.id.room_type);
         etRoomID = findViewById(R.id.input_roomId);
+        etCost = findViewById(R.id.input_cost);
         btnInput = findViewById(R.id.btn_input);
         btnRequest = findViewById(R.id.btn_request);
-        btnReport = findViewById(R.id.btn_report);
+        btnReport = findViewById(R.id.menu_report);
+        btnLogOut = findViewById(R.id.menu_logOut);
+        btnBack = findViewById(R.id.menu_back);
         mProgressBar = findViewById(R.id.progressBar);
         layout = findViewById(R.id.roomInfor);
 
         btnInput.setOnClickListener(v -> {
-            linkGetRoom= linkGetRoom.concat(etRoomID.getText().toString());
+            btnRequest.setClickable(true);
+            btnRequest.setFocusable(true);
+            btnRequest.setEnabled(true);
+            linkGetRoom = PSFString.GET_ONE_ROOM.concat(etRoomID.getText().toString());
             new HttpGetTask().execute(1);
         });
 
-        btnRequest.setOnClickListener(v -> new HttpGetTask().execute(1, 2));
+        btnRequest.setOnClickListener(v -> {
+             linkRequestRoom = PSFString.REQUEST_ROOM
+                     .concat(etRoomID.getText().toString())
+                     .concat(PSFString.COST_FIELD)
+                     .concat(etCost.getText().toString());
+            new HttpGetTask().execute(1, 2);
+        });
 
         btnReport.setOnClickListener(v -> {
             Intent intent = new Intent(RoomOptionActivity.this, ReportActivity.class);
+            startActivity(intent);
+        });
+
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(RoomOptionActivity.this, SearchActivity.class);
+            startActivity(intent);
+        });
+
+        btnLogOut.setOnClickListener(v -> {
+            Intent intent = new Intent(RoomOptionActivity.this, SignInActivity.class);
             startActivity(intent);
         });
     }
@@ -79,7 +102,9 @@ public class RoomOptionActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
+            layout.setVisibility(LinearLayout.GONE);
         }
 
         @Override
@@ -87,16 +112,32 @@ public class RoomOptionActivity extends AppCompatActivity {
 
             if (params.length == 1) {
 
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                @SuppressLint("SetTextI18n") JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , linkGetRoom, null, response -> {
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject jsonObject = response.getJSONObject(i);
                             JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
                             tvRoomID.setText(jsonObject.getString("MaPhong"));
-                            tvStatus.setText(StringConfig.configStringStatus(jsonObject.getString("TrangThai")));
+                            tvStatus.setText(StringConfig.configStringStatus(jsonObject.getString("TrangThaiDatPhong")));
                             tvRoom.setText(StringConfig.configString_toSign(jsonObject1.getString("ChatLuong")));
                             tvBed.setText(StringConfig.configString_toSign(jsonObject1.getString("TenLoaiPhong")));
+
+                            switch (jsonObject.getString("TrangThaiDatPhong")) {
+                                case "da nhan":
+                                    btnRequest.setText("Thanh toán");
+                                    etCost.setVisibility(EditText.VISIBLE);
+                                    break;
+                                case "chua nhan":
+                                    btnRequest.setText("Nhận phòng");
+                                    break;
+                                default:
+                                    btnRequest.setText("Chưa đặt");
+                                    btnRequest.setClickable(false);
+                                    btnRequest.setFocusable(false);
+                                    btnRequest.setEnabled(false);
+                                    break;
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -144,15 +185,6 @@ public class RoomOptionActivity extends AppCompatActivity {
             layout.setVisibility(LinearLayout.VISIBLE);
 
         }
-
-        private String setTextBtnRequest (String text) {
-            switch(text) {
-                case "trong": return "Nhận phòng";
-                default: return "Đang thuê";
-            }
-        }
-
-
     }
 
     private void sleep() {

@@ -77,8 +77,8 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
 
         viewHolder.tvBedType.setText("Giường ".concat(StringConfig.configString_toSign(roomBom.getBedtype())));
         viewHolder.tvRoomType.setText("Phòng ".concat(StringConfig.configString_toSign(roomBom.getRoomtype())));
-        viewHolder.tvPrice.setText("Giá ".concat(StringConfig.configString_toSign(String.valueOf(roomBom.getPrice()))));
-        viewHolder.tvNumber.setText("Phòng ".concat(StringConfig.configString_toSign(String.valueOf(roomBom.getId()))));
+        viewHolder.tvPrice.setText("Giá ".concat(String.valueOf(roomBom.getPrice())));
+        viewHolder.tvNumber.setText("Phòng ".concat(String.valueOf(roomBom.getId())));
 
         roomId = roomBom.getId();
 
@@ -86,6 +86,12 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
             viewHolder.ivImage.setImageResource(R.drawable.room_vip_1);
         } else {
             viewHolder.ivImage.setImageResource(R.drawable.room_vip_3);
+        }
+
+        if (SignInActivity.userBom.getUserType() == 10) {
+            viewHolder.btnBook.setEnabled(false);
+            viewHolder.btnBook.setClickable(false);
+            viewHolder.btnBook.setFocusable(false);
         }
 
         viewHolder.btnBook.setOnClickListener((View v) -> new HttpGetTask().execute());
@@ -153,7 +159,6 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
         protected void onPostExecute(String result) {
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             SearchActivity.customAdapter.notifyDataSetChanged();
-
         }
 
         private void sleep() {

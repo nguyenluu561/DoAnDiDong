@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,21 +21,25 @@ public class SignUpActivity extends AppCompatActivity {
     EditText etPhoneNumber, etPassword, etName, etId;
     Button btnSignUP;
     String link;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-            init();
-            btnSignUP.setOnClickListener(v -> {
+        init();
+        btnSignUP.setOnClickListener(v -> {
+            if (!checkNull()) {
                 getLink();
-                Log.i("here is link",link);
                 new HttpGetTask().execute();
-            });
+            } else
+                Toast.makeText(getApplicationContext(), PSFString.NULL_INPUT, Toast.LENGTH_LONG).show();
+
+        });
 
     }
 
-    private void init () {
+    private void init() {
         etPhoneNumber = findViewById(R.id.input_sdt);
         etPassword = findViewById(R.id.input_password);
         etName = findViewById(R.id.input_name);
@@ -44,7 +47,13 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUP = findViewById(R.id.btn_login);
     }
 
-    public void getLink () {
+    private boolean checkNull() {
+        return etPhoneNumber.getText().length() == 0 || etPassword.getText().length() == 0
+                || etName.getText().length() == 0
+                || etId.getText().length() == 0;
+    }
+
+    public void getLink() {
         link = PSFString.SIGN_UP.concat(etId.getText().toString())
                 .concat(PSFString.NAME_FIELD.concat(etName.getText().toString()))
                 .concat(PSFString.PHONENUMBER_FIELD.concat(etPhoneNumber.getText().toString()))
@@ -70,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(),PSFString.SUCCESS_RESULT,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), PSFString.SUCCESS_RESULT, Toast.LENGTH_LONG).show();
             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
             startActivity(intent);
         }

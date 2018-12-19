@@ -6,7 +6,8 @@ public class StringConfig {
         switch(text) {
             case "Thường": return "thuong";
             case "Đơn": return "don";
-            default: return "doi";
+            case "Đôi": return "doi";
+            default: return "VIP";
         }
     }
 
@@ -14,14 +15,15 @@ public class StringConfig {
         switch(text) {
             case "thuong": return "Thường";
             case "don": return "Đơn";
-            default: return "Đôi";
+            case "doi": return "Đôi";
+            default: return "VIP";
         }
     }
 
     public static String configStringStatus(String text) {
         switch(text) {
-            case "chua nhan": return "Chưa nhận";
-            default: return "Đang sử dụng";
+            case "da nhan": return "Đang sử dụng";
+            default: return "Trống";
         }
     }
 }

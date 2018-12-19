@@ -112,7 +112,7 @@ public class SignInActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignInActivity.this, SearchActivity.class);
                 startActivity(intent);
             } else if (selection == 2) {
-                Toast.makeText(getApplicationContext(), PSFString.FAILURE_RESULT, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), PSFString.FAILURE_SIGNIN, Toast.LENGTH_LONG).show();
             }
 
         }

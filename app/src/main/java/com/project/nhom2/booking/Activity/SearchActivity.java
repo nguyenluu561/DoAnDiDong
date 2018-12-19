@@ -341,7 +341,7 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
                 startActivity(intent);
             } else
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), PSFString.NULL_RESULT, Toast.LENGTH_LONG).show();
 
         }
 

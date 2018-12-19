@@ -214,7 +214,7 @@
             android:id="@+id/menu_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_user2" />
+            android:src="@mipmap/icon_user" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_bill"

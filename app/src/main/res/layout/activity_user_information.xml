@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity.UserInformationActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:padding="10dp"
             android:text="@string/name"
+            android:textColor="@color/colorSecondary"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorSecondary"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -27,62 +31,65 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/child_radius_background_orange">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:padding="10dp"
             android:text="@string/usertype"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_userType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/vip"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/child_radius_background_orange">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:padding="10dp"
             android:text="@string/score"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/_2"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
 
     </RelativeLayout>
@@ -91,31 +98,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/child_radius_background_orange">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:padding="10dp"
             android:text="@string/cmnd"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_cmnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/_2"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
     </RelativeLayout>
 
@@ -123,31 +131,64 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/child_radius_background_orange">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:padding="10dp"
             android:text="@string/phonenumber"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_phonenumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/_2"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
     </RelativeLayout>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:menu_colorNormal="@color/colorSecondary"
+        app:menu_colorPressed="@color/onBackground"
+        app:menu_colorRipple="@color/colorSecondary"
+        app:menu_labels_colorNormal="@color/onBackground"
+        app:menu_labels_colorPressed="@color/colorSecondary"
+        app:menu_labels_colorRipple="@color/onBackground"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_labels_hideAnimation="@anim/jump_to_down"
+        fab:menu_labels_showAnimation="@anim/jump_from_down">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_logOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_logout" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_back" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 </android.support.v7.widget.LinearLayoutCompat>
