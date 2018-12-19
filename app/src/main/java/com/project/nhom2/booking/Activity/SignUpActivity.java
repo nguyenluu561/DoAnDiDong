@@ -15,7 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -45,10 +45,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void getLink () {
-        link = StaticFinalString.SIGN_UP.concat(etId.getText().toString())
-                .concat(StaticFinalString.NAME_FIELD.concat(etName.getText().toString()))
-                .concat(StaticFinalString.PHONENUMBER_FIELD.concat(etPhoneNumber.getText().toString()))
-                .concat(StaticFinalString.PASSWORD_FIELD.concat(etPassword.getText().toString()));
+        link = PSFString.SIGN_UP.concat(etId.getText().toString())
+                .concat(PSFString.NAME_FIELD.concat(etName.getText().toString()))
+                .concat(PSFString.PHONENUMBER_FIELD.concat(etPhoneNumber.getText().toString()))
+                .concat(PSFString.PASSWORD_FIELD.concat(etPassword.getText().toString()));
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -70,7 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(),StaticFinalString.SUCCESS_RESULT,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),PSFString.SUCCESS_RESULT,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
             startActivity(intent);
         }

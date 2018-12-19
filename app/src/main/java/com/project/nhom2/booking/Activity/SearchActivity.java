@@ -27,7 +27,8 @@ import com.project.nhom2.booking.Adapter.RoomListAdapterSearchActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.DateTime;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
+import com.project.nhom2.booking.Util.StringConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +51,7 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static RoomListAdapterSearchActivity customAdapter;
 
-    FloatingActionButton btnUser, btnBill;
+    FloatingActionButton btnUser, btnBill, btnLogOut;
 
     Button btn_search;
 
@@ -105,6 +106,7 @@ public class SearchActivity extends AppCompatActivity {
         btn_search = findViewById(R.id.btn_search);
         btnUser = findViewById(R.id.menu_user);
         btnBill = findViewById(R.id.menu_bill);
+        btnLogOut = findViewById(R.id.menu_logOut);
 
         lvRoom = findViewById(R.id.lvRoom);
 
@@ -134,6 +136,16 @@ public class SearchActivity extends AppCompatActivity {
                 = new RoomListAdapterSearchActivity(this, R.layout.activity_room_list_row_item, arrRoom);
         customAdapter.notifyDataSetChanged();
 
+        if (SignInActivity.userBom.getUserType() != 10) {
+            btnBill.setEnabled(false);
+            btnBill.setClickable(false);
+            btnBill.setFocusable(false);
+        } else {
+            btnUser.setEnabled(false);
+            btnUser.setClickable(false);
+            btnUser.setFocusable(false);
+        }
+
         btn_search.setOnClickListener(v -> new HttpGetTask().execute(1));
 
         btnBill.setOnClickListener(v -> {
@@ -141,8 +153,10 @@ public class SearchActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnUser.setOnClickListener(v -> {
-            Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
+        btnUser.setOnClickListener(v -> new HttpGetTask().execute(1, 2));
+
+        btnLogOut.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, SignInActivity.class);
             startActivity(intent);
         });
 
@@ -240,11 +254,15 @@ public class SearchActivity extends AppCompatActivity {
         checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
         checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
 
-        String link = StaticFinalString.MAIN_LINK_FILTER_GET_ROOM
-                .concat(StaticFinalString.BED_TYPE_FILTER.concat(sp_bed_type.getSelectedItem().toString()))
-                .concat(StaticFinalString.ROOM_TYPE_FILTER.concat(sp_room_type.getSelectedItem().toString()))
-                .concat(StaticFinalString.CHECK_IN_FILTER.concat(checkInDate))
-                .concat(StaticFinalString.CHECK_OUT_FILTER.concat(checkOutDate));
+        String link = PSFString.MAIN_LINK_FILTER_GET_ROOM
+                .concat(PSFString
+                        .BED_TYPE_FILTER.concat(StringConfig.configString_toNoSign(sp_bed_type.getSelectedItem().toString())))
+                .concat(PSFString
+                        .ROOM_TYPE_FILTER.concat(StringConfig.configString_toNoSign(sp_room_type.getSelectedItem().toString())))
+                .concat(PSFString
+                        .CHECK_IN_FILTER.concat(checkInDate))
+                .concat(PSFString
+                        .CHECK_OUT_FILTER.concat(checkOutDate));
         Log.i("here is link", link);
         return link;
     }
@@ -252,6 +270,7 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class HttpGetTask extends AsyncTask<Integer, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String abc = "a";
 
         @Override
         protected void onPreExecute() {
@@ -260,10 +279,10 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Integer... params) {
-            final String[] result = new String[1];
+            JsonArrayRequest jsonArrayRequest;
             if (params.length == 1) {
                 arrRoom.clear();
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , filterLink(), null, response -> {
                     try {
                         for (int i = 0; i < response.length(); i++) {
@@ -275,26 +294,36 @@ public class SearchActivity extends AppCompatActivity {
                                     .roomtype(jsonObject1.getString("ChatLuong"))
                                     .price(jsonObject1.getInt("Gia")).build();
                             arrRoom.add(room);
-                            result[0] = response.toString();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }, Throwable::printStackTrace);
 
-                requestQueue.add(jsonArrayRequest);
 
-                for (int x = 1; x < 11; x++) {
-                    sleep();
-                    publishProgress(x * 10);
-                }
-
-                return result[0];
             } else {
+                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                        , PSFString.HISTORY.concat(SignInActivity.userBom.getCmnd())
+                        , null, response -> {
 
+                    SignInActivity.userBom.setHistory(response.length());
+                    Log.i("history", String.valueOf(response.length()));
+
+                }, Throwable::printStackTrace);
+
+                abc = "b";
+            }
+
+            requestQueue.add(jsonArrayRequest);
+
+
+            for (int x = 1; x < 11; x++) {
+                sleep();
+                publishProgress(x * 10);
             }
 
             return null;
+
         }
 
         @Override
@@ -305,15 +334,15 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            if (result.equals("1")) {
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                if (arrRoom.size() != 0) {
-                    lvRoom.setAdapter(customAdapter);
-                } else
-                    Toast.makeText(getApplicationContext(),result , Toast.LENGTH_LONG).show();
-            } else {
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+            if (arrRoom.size() != 0) {
+                lvRoom.setAdapter(customAdapter);
+            } else if (abc.equals("b")) {
+                Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
+                startActivity(intent);
+            } else
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
 
-            }
         }
 
         private void sleep() {

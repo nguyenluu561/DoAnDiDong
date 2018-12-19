@@ -15,11 +15,28 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/name"
-            android:textSize="40sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@color/colorSecondary"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/child_radius_background_orange">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/usertype"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
             android:id="@+id/tv_userType"
@@ -27,24 +44,15 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/vip"
-            android:textColor="@color/colorSecondary"
-            android:layout_toLeftOf="@+id/im_user"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:layout_toStartOf="@+id/im_user"
-            tools:ignore="RelativeOverlap" />
-
-        <ImageView
-            android:id="@+id/im_user"
             android:paddingRight="10dp"
-            android:paddingTop="14dp"
+            android:paddingEnd="10dp"
+            android:text="@string/vip"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_user"
-            tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
+            tools:ignore="RelativeOverlap,RtlSymmetry" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,7 +63,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/score"
-            android:textSize="40sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -67,24 +75,16 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/_2"
             android:textColor="@color/colorPrimaryDark"
-            android:layout_toLeftOf="@+id/im_star"
-            android:textSize="40sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_toStartOf="@+id/im_star"
-            tools:ignore="RelativeOverlap" />
-
-        <ImageView
-            android:id="@+id/im_star"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_star"
-            tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
+            tools:ignore="RelativeOverlap,RtlSymmetry" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -95,15 +95,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="@string/phong"
-            android:textSize="40sp"
+            android:text="@string/cmnd"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
-            android:id="@+id/tv_room"
+            android:id="@+id/tv_cmnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -112,7 +112,39 @@
             android:paddingEnd="10dp"
             android:text="@string/_2"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="40sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap,RtlSymmetry" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/child_radius_background_orange">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/phonenumber"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/tv_phonenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/_2"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

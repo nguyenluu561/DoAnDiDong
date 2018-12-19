@@ -1,40 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">JustBook</string>
-    <string name="title_activity_sign_in">SignInActivity</string>
-    <string name="title_activity_user_information">UserInformationActivity</string>
 
-    <string name="floor">Tầng</string>
     <string name="room_type">Loại phòng</string>
     <string name="bed_type">Loại giường</string>
     <string name="check_in">Ngày đến</string>
     <string name="check_out">Ngày đi</string>
-    <string name="price">Khoảng giá</string>
-    <string name="bed1">Giường đôi</string>
-    <string name="bed2">Giường đơn</string>
-    <string name="wifi">Wifi</string>
-    <string name="tivi">Tivi</string>
+    <string name="price">Giá</string>
     <string name="search">Tìm</string>
     <string name="book">Đặt phòng</string>
 
     <string-array name="sp_room_type">
-        <item>thuong</item>
-        <item>vip</item>
+        <item>Thường</item>
+        <item>VIP</item>
     </string-array>
 
     <string-array name="sp_bed_type">
-        <item>don</item>
-        <item>doi</item>
+        <item>Đơn</item>
+        <item>Đôi</item>
     </string-array>
-
-    <string name="rule1">- Giờ check-in: cả ngày</string>
-    <string name="rule2">- Giờ check-out: trước 12h trưa ngày hôm sau</string>
-    <string name="rule3">- Giá phòng thường: 100$ (chưa tính phụ thu)</string>
-    <string name="rule4">- Giá phòng vip: 500$ (chưa tính phụ thu)</string>
-    <string name="rule5">- Khách hàng chỉ được đặt một lúc một phòng</string>
-    <string name="rule6">- Mỗi phòng cho nhiều nhất 4 người sinh hoạt</string>
 
     <string name="name">Tên</string>
     <string name="cmnd">Cmnd</string>
+    <string name="usertype">Thành viên</string>
     <string name="phonenumber">Số điện thoại</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
@@ -50,15 +37,11 @@
     <string name="phong">Phòng</string>
 
     <string name="title_activity_report">ReportActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="string1">Cả hai</string>
     <string name="report">Thống kê</string>
     <string name="searchRoom">Tìm phòng</string>
     <string name="INPUT_ID">Nhập chứng minh nhân dân</string>
     <string name="all_room">Tất cả phòng</string>
-    <string name="optionRoom1">Nhận phòng</string>
-    <string name="optionRoom2">Trả phòng</string>
-
+    <string name="numberRoom">Số phòng</string>
+    <string name="status">Tình trạng</string>
 
 </resources>

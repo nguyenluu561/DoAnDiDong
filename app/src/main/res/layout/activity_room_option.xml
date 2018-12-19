@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity.RoomOptionActivity">
 
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp">
+        <EditText
+            android:id="@+id/input_roomId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/numberRoom"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:targetApi="o" />
+    </android.support.design.widget.TextInputLayout>
+
 
     <android.support.design.button.MaterialButton
-        android:id="@+id/btn_opt1"
-        android:layout_width="0dp"
+        android:id="@+id/btn_input"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:text="@string/optionRoom1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/searchRoom"
         android:textSize="20sp" />
-
-        <android.support.design.button.MaterialButton
-            android:id="@+id/btn_opt2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:text="@string/optionRoom2"
-            android:textSize="20sp" />
-    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -39,12 +42,180 @@
         android:maxHeight="5dip"
         android:minHeight="5dip"
         android:visibility="invisible"
-        tools:targetApi="lollipop">
-    </ProgressBar>
+        tools:targetApi="lollipop" />
 
-    <ListView
-        android:id="@+id/lv_Room"
-        android:layout_weight="3"
+    <LinearLayout
+        android:id="@+id/roomInfor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/child_radius_background_primary"
+        android:descendantFocusability="beforeDescendants"
+        android:orientation="vertical"
+        android:visibility="gone"
+       >
+
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/numberRoom"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+
+            <TextView
+                android:id="@+id/idRoom"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/status"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/room_type"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+
+            <TextView
+                android:id="@+id/room_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/bed_type"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+
+            <TextView
+                android:id="@+id/bed_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/child_radius_background_white"
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/btn_report"
         android:layout_width="wrap_content"
-        android:layout_height="0dp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@mipmap/icon_report"
+        app:menu_colorNormal="@color/colorSecondary"
+        app:menu_colorPressed="@color/onBackground"
+        app:menu_colorRipple="@color/colorSecondary"
+        app:menu_labels_colorNormal="@color/onBackground"
+        app:menu_labels_colorPressed="@color/colorSecondary"
+        app:menu_labels_colorRipple="@color/onBackground"
+        fab:menu_animationDelayPerItem="0" />
+
 </LinearLayout>

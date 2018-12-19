@@ -18,7 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.Bom.UserBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,14 +54,14 @@ public class SignInActivity extends AppCompatActivity {
 
         final AppCompatButton btn_signin = findViewById(R.id.btn_login);
 
-        userBom = new UserBom("a","b","c",1);
+        userBom = new UserBom("a","b","c",1,0);
 
         btn_signin.setOnClickListener(v -> {
             if (!checkNull()) {
                 getLink();
                 new HttpGetTask().execute();
             } else
-                Toast.makeText(getApplicationContext(), StaticFinalString.NULL_INPUT, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), PSFString.NULL_INPUT, Toast.LENGTH_LONG).show();
 
         });
         tv_signup.setOnClickListener(v -> signUp());
@@ -84,6 +84,7 @@ public class SignInActivity extends AppCompatActivity {
                     , response -> {
                 try {
                     responseHandler(response);
+                    selection = 1;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,7 +112,7 @@ public class SignInActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignInActivity.this, SearchActivity.class);
                 startActivity(intent);
             } else if (selection == 2) {
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), PSFString.FAILURE_RESULT, Toast.LENGTH_LONG).show();
             }
 
         }
@@ -141,8 +142,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void getLink() {
-        link = StaticFinalString.SIGN_IN.concat(et_username.getText().toString())
-                .concat(StaticFinalString.PASSWORD_FIELD.concat(et_password.getText().toString()));
+        link = PSFString.SIGN_IN.concat(et_username.getText().toString())
+                .concat(PSFString.PASSWORD_FIELD.concat(et_password.getText().toString()));
         Log.i("here is link", link);
     }
 

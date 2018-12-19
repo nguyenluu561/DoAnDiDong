@@ -26,7 +26,7 @@ import com.project.nhom2.booking.Activity.SearchActivity;
 import com.project.nhom2.booking.Activity.SignInActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
 
 import java.util.List;
 
@@ -72,9 +72,9 @@ public class RoomListAdapter extends ArrayAdapter<RoomBom> {
         viewHolder.tvRoomId.setText(roomBom.getId());
 
         if (roomBom.getRoomtype().equals("thuong")) {
-            viewHolder.ivImage.setImageResource(R.drawable.room_normal_1);
+            viewHolder.ivImage.setImageResource(R.drawable.room_vip_1);
         } else {
-            viewHolder.ivImage.setImageResource(R.drawable.room_vip_2);
+            viewHolder.ivImage.setImageResource(R.drawable.room_vip_3);
         }
 
         viewHolder.btn.setOnClickListener((View v) -> new HttpGetTask().execute());
@@ -97,11 +97,11 @@ public class RoomListAdapter extends ArrayAdapter<RoomBom> {
     }
 
     public String getLink() {
-        return StaticFinalString.MAIN_LINK_FILTER_BOOK_ROOM
-                .concat(StaticFinalString.ID_FIELD.concat(SignInActivity.userBom.getCmnd()))
-                .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomId))
-                .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
-                .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
+        return PSFString.MAIN_LINK_FILTER_BOOK_ROOM
+                .concat(PSFString.ID_FIELD.concat(SignInActivity.userBom.getCmnd()))
+                .concat(PSFString.ROOM_ID_FILTER.concat(roomId))
+                .concat(PSFString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
+                .concat(PSFString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
     }
 
     @SuppressLint("StaticFieldLeak")

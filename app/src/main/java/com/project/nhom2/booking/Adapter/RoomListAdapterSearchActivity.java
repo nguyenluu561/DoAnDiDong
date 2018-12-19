@@ -25,7 +25,8 @@ import com.project.nhom2.booking.Activity.SearchActivity;
 import com.project.nhom2.booking.Activity.SignInActivity;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
+import com.project.nhom2.booking.Util.StringConfig;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
     }
 
     //gán nội dung cho từng row item
+    @SuppressLint("SetTextI18n")
     @TargetApi(Build.VERSION_CODES.N)
     @NonNull
     @Override
@@ -63,6 +65,7 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
             viewHolder.tvPrice = convertView.findViewById(R.id.price);
             viewHolder.tvBedType = convertView.findViewById(R.id.bed_type);
             viewHolder.tvRoomType = convertView.findViewById(R.id.room_type);
+            viewHolder.tvNumber = convertView.findViewById(R.id.room_numer);
             viewHolder.ivImage = convertView.findViewById(R.id.ivRoom);
             viewHolder.btnBook = convertView.findViewById(R.id.btn_book);
 
@@ -72,21 +75,20 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
         }
         RoomBom roomBom = arrRoom.get(position);
 
-        viewHolder.tvBedType.setText(roomBom.getBedtype());
-        viewHolder.tvRoomType.setText(roomBom.getRoomtype());
-        viewHolder.tvPrice.setText(String.valueOf(roomBom.getPrice()));
+        viewHolder.tvBedType.setText("Giường ".concat(StringConfig.configString_toSign(roomBom.getBedtype())));
+        viewHolder.tvRoomType.setText("Phòng ".concat(StringConfig.configString_toSign(roomBom.getRoomtype())));
+        viewHolder.tvPrice.setText("Giá ".concat(StringConfig.configString_toSign(String.valueOf(roomBom.getPrice()))));
+        viewHolder.tvNumber.setText("Phòng ".concat(StringConfig.configString_toSign(String.valueOf(roomBom.getId()))));
+
         roomId = roomBom.getId();
 
         if (roomBom.getRoomtype().equals("thuong")) {
-            viewHolder.ivImage.setImageResource(R.drawable.room_normal_1);
+            viewHolder.ivImage.setImageResource(R.drawable.room_vip_1);
         } else {
-            viewHolder.ivImage.setImageResource(R.drawable.room_vip_2);
+            viewHolder.ivImage.setImageResource(R.drawable.room_vip_3);
         }
 
-        viewHolder.btnBook.setOnClickListener((View v) -> {
-            new HttpGetTask().execute();
-
-        });
+        viewHolder.btnBook.setOnClickListener((View v) -> new HttpGetTask().execute());
         return convertView;
     }
 
@@ -100,17 +102,17 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
 
     //khởi tạo các biến nắm nội dung hiển thị của một row
     public class ViewHolder {
-        TextView tvBedType, tvRoomType, tvPrice;
+        TextView tvBedType, tvRoomType, tvPrice, tvNumber;
         ImageView ivImage;
         Button btnBook;
     }
 
     public String getLink() {
-        return StaticFinalString.MAIN_LINK_FILTER_BOOK_ROOM
-                .concat(StaticFinalString.ID_FIELD.concat(SignInActivity.userBom.getCmnd()))
-                .concat(StaticFinalString.ROOM_ID_FILTER.concat(roomId))
-                .concat(StaticFinalString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
-                .concat(StaticFinalString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
+        return PSFString.MAIN_LINK_FILTER_BOOK_ROOM
+                .concat(PSFString.ID_FIELD.concat(SignInActivity.userBom.getCmnd()))
+                .concat(PSFString.ROOM_ID_FILTER.concat(roomId))
+                .concat(PSFString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
+                .concat(PSFString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
     }
 
     @SuppressLint("StaticFieldLeak")

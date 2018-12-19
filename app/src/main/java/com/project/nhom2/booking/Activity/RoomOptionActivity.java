@@ -1,37 +1,42 @@
 package com.project.nhom2.booking.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.project.nhom2.booking.Adapter.RoomListAdapter;
+import com.github.clans.fab.FloatingActionButton;
 import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
-import com.project.nhom2.booking.Util.StaticFinalString;
+import com.project.nhom2.booking.Util.PSFString;
+import com.project.nhom2.booking.Util.StringConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class RoomOptionActivity extends AppCompatActivity {
-    private ListView lvRoom;
+    @SuppressLint("StaticFieldLeak")
     public static ProgressBar mProgressBar;
-    RoomListAdapter roomListAdapter;
-    ArrayList<RoomBom> arrRoom;
-    String link1 = "";
-    String link2 = "";
-    Button btnOpt1, btnOpt2;
+
+    String linkGetRoom = PSFString.GET_ONE_ROOM;
+    String linkRequestRoom = PSFString.REQUEST_ROOM;
+
+    EditText etRoomID;
+    TextView tvRoomID, tvStatus, tvRoom, tvBed;
+    Button btnInput, btnRequest;
+    FloatingActionButton btnReport;
+    LinearLayout layout;
 
 
     @Override
@@ -43,16 +48,29 @@ public class RoomOptionActivity extends AppCompatActivity {
     }
 
     private void init() {
-        arrRoom = new ArrayList<>();
-        roomListAdapter = new RoomListAdapter(this, R.layout.activity_room_list_row_item2, arrRoom);
-        roomListAdapter.notifyDataSetChanged();
-        lvRoom = findViewById(R.id.lv_Room);
-        btnOpt1 = findViewById(R.id.btn_opt1);
-        btnOpt2 = findViewById(R.id.btn_opt2);
-        mProgressBar = findViewById(R.id.progressBar);
 
-        btnOpt1.setOnClickListener(v -> new HttpGetTask().execute(1));
-        btnOpt2.setOnClickListener(v -> new HttpGetTask().execute(1, 2));
+        tvRoomID = findViewById(R.id.idRoom);
+        tvStatus = findViewById(R.id.status);
+        tvBed = findViewById(R.id.bed_type);
+        tvRoom = findViewById(R.id.room_type);
+        etRoomID = findViewById(R.id.input_roomId);
+        btnInput = findViewById(R.id.btn_input);
+        btnRequest = findViewById(R.id.btn_request);
+        btnReport = findViewById(R.id.btn_report);
+        mProgressBar = findViewById(R.id.progressBar);
+        layout = findViewById(R.id.roomInfor);
+
+        btnInput.setOnClickListener(v -> {
+            linkGetRoom= linkGetRoom.concat(etRoomID.getText().toString());
+            new HttpGetTask().execute(1);
+        });
+
+        btnRequest.setOnClickListener(v -> new HttpGetTask().execute(1, 2));
+
+        btnReport.setOnClickListener(v -> {
+            Intent intent = new Intent(RoomOptionActivity.this, ReportActivity.class);
+            startActivity(intent);
+        });
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -66,17 +84,34 @@ public class RoomOptionActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Integer... params) {
-            arrRoom.clear();
 
             if (params.length == 1) {
+
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
-                        , link1, null, response -> {
+                        , linkGetRoom, null, response -> {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
+                            tvRoomID.setText(jsonObject.getString("MaPhong"));
+                            tvStatus.setText(StringConfig.configStringStatus(jsonObject.getString("TrangThai")));
+                            tvRoom.setText(StringConfig.configString_toSign(jsonObject1.getString("ChatLuong")));
+                            tvBed.setText(StringConfig.configString_toSign(jsonObject1.getString("TenLoaiPhong")));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace);
+
+                requestQueue.add(jsonArrayRequest);
+            } else {
+                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                        , linkRequestRoom, null, response -> {
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject jsonObject = response.getJSONObject(i);
                             RoomBom room = RoomBom.builder()
                                     .id(jsonObject.getString("MaPhong")).build();
-                            arrRoom.add(room);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -86,23 +121,6 @@ public class RoomOptionActivity extends AppCompatActivity {
                 requestQueue.add(jsonArrayRequest);
             }
 
-            else {
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
-                        , link2, null, response -> {
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            RoomBom room = RoomBom.builder()
-                                    .id(jsonObject.getString("MaPhong")).build();
-                            arrRoom.add(room);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, Throwable::printStackTrace);
-                requestQueue.add(jsonArrayRequest);
-
-            }
 
             for (int x = 1; x < 11; x++) {
                 sleep();
@@ -123,10 +141,15 @@ public class RoomOptionActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-            if (arrRoom.size() != 0) {
-                lvRoom.setAdapter(roomListAdapter);
-            } else
-                Toast.makeText(getApplicationContext(), StaticFinalString.FAILURE_RESULT, Toast.LENGTH_LONG).show();
+            layout.setVisibility(LinearLayout.VISIBLE);
+
+        }
+
+        private String setTextBtnRequest (String text) {
+            switch(text) {
+                case "trong": return "Nhận phòng";
+                default: return "Đang thuê";
+            }
         }
 
 
