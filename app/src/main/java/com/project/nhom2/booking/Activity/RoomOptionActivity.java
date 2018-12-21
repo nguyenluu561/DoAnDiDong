@@ -11,13 +11,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionButton;
-import com.project.nhom2.booking.Bom.RoomBom;
 import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.PSFString;
 import com.project.nhom2.booking.Util.StringConfig;
@@ -33,7 +33,7 @@ public class RoomOptionActivity extends AppCompatActivity {
     String linkRequestRoom;
 
     EditText etRoomID, etCost;
-    TextView tvRoomID, tvStatus, tvRoom, tvBed;
+    TextView tvRoomID, tvStatus, tvRoom, tvBed, tvPrice;
     Button btnInput, btnRequest;
     FloatingActionButton btnReport, btnBack, btnLogOut;
     LinearLayout layout;
@@ -54,6 +54,7 @@ public class RoomOptionActivity extends AppCompatActivity {
         tvStatus = findViewById(R.id.status);
         tvBed = findViewById(R.id.bed_type);
         tvRoom = findViewById(R.id.room_type);
+        tvPrice = findViewById(R.id.price);
         etRoomID = findViewById(R.id.input_roomId);
         etCost = findViewById(R.id.input_cost);
         btnInput = findViewById(R.id.btn_input);
@@ -73,10 +74,27 @@ public class RoomOptionActivity extends AppCompatActivity {
         });
 
         btnRequest.setOnClickListener(v -> {
-             linkRequestRoom = PSFString.REQUEST_ROOM
-                     .concat(etRoomID.getText().toString())
-                     .concat(PSFString.COST_FIELD)
-                     .concat(etCost.getText().toString());
+
+
+            //nếu đang là nút thanh toán thì ktra giá trị ở edittext rồi gán vào link
+            //nếu đang là nút nhận phòng thì set cứng giá trị ở COST_FIELD là 0
+            if (btnRequest.getText().equals("Thanh toán")) {
+                if (etRoomID.getText().toString().length() != 0) {
+                    linkRequestRoom = PSFString.REQUEST_ROOM
+                            .concat(etRoomID.getText().toString())
+                            .concat(PSFString.COST_FIELD)
+                            .concat(etCost.getText().toString());
+                } else
+                    Toast.makeText(getApplicationContext(), PSFString.NULL_INPUT, Toast.LENGTH_LONG).show();
+
+            } else {
+                linkRequestRoom = PSFString.REQUEST_ROOM
+                        .concat(etRoomID.getText().toString())
+                        .concat(PSFString.COST_FIELD)
+                        .concat("0");
+                Log.i("link",linkRequestRoom);
+            }
+
             new HttpGetTask().execute(1, 2);
         });
 
@@ -99,20 +117,24 @@ public class RoomOptionActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class HttpGetTask extends AsyncTask<Integer, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest;
+        int x = 0;
 
         @Override
         protected void onPreExecute() {
 
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
             layout.setVisibility(LinearLayout.GONE);
+            tvPrice.setVisibility(TextView.GONE);
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected String doInBackground(Integer... params) {
 
             if (params.length == 1) {
 
-                @SuppressLint("SetTextI18n") JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , linkGetRoom, null, response -> {
                     try {
                         for (int i = 0; i < response.length(); i++) {
@@ -144,24 +166,20 @@ public class RoomOptionActivity extends AppCompatActivity {
                     }
                 }, Throwable::printStackTrace);
 
-                requestQueue.add(jsonArrayRequest);
+
             } else {
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , linkRequestRoom, null, response -> {
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            RoomBom room = RoomBom.builder()
-                                    .id(jsonObject.getString("MaPhong")).build();
-                        }
+                        tvPrice.setText(String.valueOf(response.getInt(3)));
+                        x = 1;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }, Throwable::printStackTrace);
 
-                requestQueue.add(jsonArrayRequest);
             }
-
+            requestQueue.add(jsonArrayRequest);
 
             for (int x = 1; x < 11; x++) {
                 sleep();
@@ -169,8 +187,6 @@ public class RoomOptionActivity extends AppCompatActivity {
             }
 
             return "1";
-
-
         }
 
         @Override
@@ -183,6 +199,10 @@ public class RoomOptionActivity extends AppCompatActivity {
 
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             layout.setVisibility(LinearLayout.VISIBLE);
+
+            if (x == 1) {
+                tvPrice.setVisibility(TextView.VISIBLE);
+            }
 
         }
     }

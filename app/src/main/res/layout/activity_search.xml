@@ -153,7 +153,6 @@
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/sp_bed_type"
-                        android:textSize="20sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -221,6 +220,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_bill" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_report" />
 
 
     </com.github.clans.fab.FloatingActionMenu>

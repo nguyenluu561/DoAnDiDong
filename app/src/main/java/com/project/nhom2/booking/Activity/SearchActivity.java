@@ -51,7 +51,7 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static RoomListAdapterSearchActivity customAdapter;
 
-    FloatingActionButton btnUser, btnBill, btnLogOut;
+    FloatingActionButton btnUser, btnBill, btnLogOut, btnReport;
 
     Button btn_search;
 
@@ -107,6 +107,7 @@ public class SearchActivity extends AppCompatActivity {
         btnUser = findViewById(R.id.menu_user);
         btnBill = findViewById(R.id.menu_bill);
         btnLogOut = findViewById(R.id.menu_logOut);
+        btnReport = findViewById(R.id.menu_report);
 
         lvRoom = findViewById(R.id.lvRoom);
 
@@ -140,6 +141,9 @@ public class SearchActivity extends AppCompatActivity {
             btnBill.setEnabled(false);
             btnBill.setClickable(false);
             btnBill.setFocusable(false);
+            btnReport.setEnabled(false);
+            btnReport.setClickable(false);
+            btnReport.setFocusable(false);
         } else {
             btnUser.setEnabled(false);
             btnUser.setClickable(false);
@@ -157,6 +161,11 @@ public class SearchActivity extends AppCompatActivity {
 
         btnLogOut.setOnClickListener(v -> {
             Intent intent = new Intent(SearchActivity.this, SignInActivity.class);
+            startActivity(intent);
+        });
+
+        btnReport.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, ReportActivity.class);
             startActivity(intent);
         });
 

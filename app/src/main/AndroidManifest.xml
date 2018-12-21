@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.project.nhom2.booking">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
         <activity
             android:name=".Activity.SignUpActivity"
@@ -40,7 +39,9 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activity.ReportActivity"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator">
+
+        </activity>
         <activity
             android:name=".Activity.RoomOptionActivity"
             tools:ignore="InnerclassSeparator" />

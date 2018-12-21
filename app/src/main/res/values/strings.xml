@@ -19,6 +19,19 @@
         <item>Đôi</item>
     </string-array>
 
+    <string-array name="sp_year">
+        <item>2018</item>
+        <item>2019</item>
+    </string-array>
+
+    <string-array name="sp_filter">
+        <item>Phòng vip</item>
+        <item>Phòng thường</item>
+        <item>Giường đơn</item>
+        <item>Giường đôi</item>
+        <item>Tổng</item>
+    </string-array>
+
     <string name="name">Tên</string>
     <string name="cmnd">Cmnd</string>
     <string name="usertype">Thành viên</string>
@@ -40,8 +53,10 @@
     <string name="report">Thống kê</string>
     <string name="searchRoom">Tìm phòng</string>
     <string name="INPUT_ID">Nhập chứng minh nhân dân</string>
-    <string name="all_room">Tất cả phòng</string>
+    <string name="all_room">Cả hai</string>
     <string name="numberRoom">Số phòng</string>
     <string name="status">Tình trạng</string>
+    <string name="filter">Điều kiện</string>
+    <string name="year">Năm</string>
 
 </resources>

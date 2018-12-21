@@ -3,7 +3,7 @@ package com.project.nhom2.booking.Util;
 public class PSFString {
 
     public static final String MAIN_LINK_FILTER_GET_ROOM = "https://datphong12.000webhostapp.com/phong.php?";
-    public static final String MAIN_LINK_FILTER_BOOK_ROOM = "https://datphong12.000webhostapp.com/datphong.php?TrangThai=chua%20nhan&";
+    public static final String MAIN_LINK_FILTER_BOOK_ROOM = "https://datphong12.000webhostapp.com/datphong.php?TrangThai=chua%20nhan";
     public static final String GET_ONE_ROOM = "https://datphong12.000webhostapp.com/chitietphong.php?MaPhong=";
     public static final String REQUEST_ROOM = "https://datphong12.000webhostapp.com/thanhtoan.php?MaPhong=";
 
@@ -11,7 +11,7 @@ public class PSFString {
     public static final String SIGN_UP = "https://datphong12.000webhostapp.com/dangki.php?Cmnd=";
     public static final String HISTORY = "http://datphong12.000webhostapp.com/lichsudatphong.php?Cmnd=";
 
-    public static final String BED_TYPE_FILTER = "TenLoaiPhong=";
+    public static final String BED_TYPE_FILTER = "&TenLoaiPhong=";
     public static final String ROOM_TYPE_FILTER = "&ChatLuong=";
     public static final String CHECK_IN_FILTER = "&NgBD=";
     public static final String CHECK_OUT_FILTER = "&NgKT=";
@@ -29,5 +29,6 @@ public class PSFString {
     public static final String NULL_INPUT = "Vui lòng điền đầy đủ thông tin";
     public static final String FAILURE_SIGNIN ="Thông tin đăng nhập không chính xác";
 
+    public static final String REPORT ="http://datphong12.000webhostapp.com/thongkehoadon.php?nam=";
 
 }
