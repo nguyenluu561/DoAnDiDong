@@ -313,12 +313,7 @@ public class SearchActivity extends AppCompatActivity {
             } else {
                 jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , PSFString.HISTORY.concat(SignInActivity.userBom.getCmnd())
-                        , null, response -> {
-
-                    SignInActivity.userBom.setHistory(response.length());
-                    Log.i("history", String.valueOf(response.length()));
-
-                }, Throwable::printStackTrace);
+                        , null, response -> SignInActivity.userBom.setHistory(response.length()), Throwable::printStackTrace);
 
                 abc = "b";
             }

@@ -14,7 +14,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linear_layout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/child_radius_background_primary"
@@ -186,7 +185,6 @@
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

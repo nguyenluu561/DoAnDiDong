@@ -5,7 +5,8 @@ public class PSFString {
     public static final String MAIN_LINK_FILTER_GET_ROOM = "https://datphong12.000webhostapp.com/phong.php?";
     public static final String MAIN_LINK_FILTER_BOOK_ROOM = "https://datphong12.000webhostapp.com/datphong.php?TrangThai=chua%20nhan";
     public static final String GET_ONE_ROOM = "https://datphong12.000webhostapp.com/chitietphong.php?MaPhong=";
-    public static final String REQUEST_ROOM = "https://datphong12.000webhostapp.com/thanhtoan.php?MaPhong=";
+    public static final String REQUEST_ROOM1 = "https://datphong12.000webhostapp.com/thanhtoan.php?MaPhong=";
+    public static final String REQUEST_ROOM2 = "http://datphong12.000webhostapp.com/nhanphong.php?MaPhong=";
 
     public static final String SIGN_IN = "https://datphong12.000webhostapp.com/user.php?TenTK=";
     public static final String SIGN_UP = "https://datphong12.000webhostapp.com/dangki.php?Cmnd=";

@@ -80,7 +80,7 @@ public class RoomOptionActivity extends AppCompatActivity {
             //nếu đang là nút nhận phòng thì set cứng giá trị ở COST_FIELD là 0
             if (btnRequest.getText().equals("Thanh toán")) {
                 if (etRoomID.getText().toString().length() != 0) {
-                    linkRequestRoom = PSFString.REQUEST_ROOM
+                    linkRequestRoom = PSFString.REQUEST_ROOM1
                             .concat(etRoomID.getText().toString())
                             .concat(PSFString.COST_FIELD)
                             .concat(etCost.getText().toString());
@@ -88,11 +88,8 @@ public class RoomOptionActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), PSFString.NULL_INPUT, Toast.LENGTH_LONG).show();
 
             } else {
-                linkRequestRoom = PSFString.REQUEST_ROOM
-                        .concat(etRoomID.getText().toString())
-                        .concat(PSFString.COST_FIELD)
-                        .concat("0");
-                Log.i("link",linkRequestRoom);
+                linkRequestRoom = PSFString.REQUEST_ROOM2
+                        .concat(etRoomID.getText().toString());
             }
 
             new HttpGetTask().execute(1, 2);

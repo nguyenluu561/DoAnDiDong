@@ -5,7 +5,6 @@
     <string name="bed_type">Loại giường</string>
     <string name="check_in">Ngày đến</string>
     <string name="check_out">Ngày đi</string>
-    <string name="price">Giá</string>
     <string name="search">Tìm</string>
     <string name="book">Đặt phòng</string>
 
@@ -46,13 +45,9 @@
     <string name="score">Điểm tích luỹ</string>
     <string name="_2">2</string>
     <string name="vip">VIP</string>
-    <string name="phong">Phòng</string>
 
-    <string name="title_activity_report">ReportActivity</string>
     <string name="report">Thống kê</string>
     <string name="searchRoom">Tìm phòng</string>
-    <string name="INPUT_ID">Nhập chứng minh nhân dân</string>
-    <string name="all_room">Cả hai</string>
     <string name="numberRoom">Số phòng</string>
     <string name="status">Tình trạng</string>
     <string name="filter">Điều kiện</string>
