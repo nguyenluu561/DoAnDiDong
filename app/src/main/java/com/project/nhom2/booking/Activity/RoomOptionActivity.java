@@ -75,9 +75,6 @@ public class RoomOptionActivity extends AppCompatActivity {
 
         btnRequest.setOnClickListener(v -> {
 
-
-            //nếu đang là nút thanh toán thì ktra giá trị ở edittext rồi gán vào link
-            //nếu đang là nút nhận phòng thì set cứng giá trị ở COST_FIELD là 0
             if (btnRequest.getText().equals("Thanh toán")) {
                 if (etRoomID.getText().toString().length() != 0) {
                     linkRequestRoom = PSFString.REQUEST_ROOM1
@@ -115,7 +112,7 @@ public class RoomOptionActivity extends AppCompatActivity {
     private class HttpGetTask extends AsyncTask<Integer, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest;
-        int x = 0;
+        int temp = 0;
 
         @Override
         protected void onPreExecute() {
@@ -163,13 +160,14 @@ public class RoomOptionActivity extends AppCompatActivity {
                     }
                 }, Throwable::printStackTrace);
 
+                temp = 1;
 
             } else {
                 jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , linkRequestRoom, null, response -> {
                     try {
                         tvPrice.setText(String.valueOf(response.getInt(3)));
-                        x = 1;
+                        temp = 2;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -195,9 +193,9 @@ public class RoomOptionActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-            layout.setVisibility(LinearLayout.VISIBLE);
 
-            if (x == 1) {
+            if (temp == 1) {
+                layout.setVisibility(LinearLayout.VISIBLE);
                 tvPrice.setVisibility(TextView.VISIBLE);
             }
 

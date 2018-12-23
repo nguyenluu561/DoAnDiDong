@@ -250,9 +250,9 @@ public class SearchActivity extends AppCompatActivity {
 
     public void setCheckOutMinDate() {
         //vì giá trị tháng trả về nhỏ hơn thực tế 1 đơn vị
-        // nên cần cộng thêm số milisecond giây của 1 tháng và 2 ngày
+        // nên cần cộng thêm số milisecond giây của 1 tháng và 1,5 ngày
         checkOutMinDate =
-                DateTime.dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L;
+                DateTime.dateToMiliseconds(checkInDay, checkInMonth, checkInYear) + 2592000000L + 129600000;
     }
 
     //Lấy link từ các thuộc tính lọc
@@ -289,8 +289,8 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... params) {
             JsonArrayRequest jsonArrayRequest;
+            arrRoom.clear();
             if (params.length == 1) {
-                arrRoom.clear();
                 jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , filterLink(), null, response -> {
                     try {
@@ -314,14 +314,13 @@ public class SearchActivity extends AppCompatActivity {
                 jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , PSFString.HISTORY.concat(SignInActivity.userBom.getCmnd())
                         , null, response -> SignInActivity.userBom.setHistory(response.length()), Throwable::printStackTrace);
-
                 abc = "b";
             }
 
             requestQueue.add(jsonArrayRequest);
 
 
-            for (int x = 1; x < 11; x++) {
+            for (int x = 0; x < 11; x++) {
                 sleep();
                 publishProgress(x * 10);
             }
@@ -341,6 +340,7 @@ public class SearchActivity extends AppCompatActivity {
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             if (arrRoom.size() != 0) {
                 lvRoom.setAdapter(customAdapter);
+                customAdapter.notifyDataSetChanged();
             } else if (abc.equals("b")) {
                 Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
                 startActivity(intent);
