@@ -16,10 +16,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.nhom2.booking.Activity.SearchActivity;
 import com.project.nhom2.booking.Activity.SignInActivity;
@@ -28,6 +30,7 @@ import com.project.nhom2.booking.R;
 import com.project.nhom2.booking.Util.PSFString;
 import com.project.nhom2.booking.Util.StringConfig;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.project.nhom2.booking.Activity.SearchActivity.mDelay;
@@ -38,8 +41,6 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
     private Context context;
     private int resource;
     private List<RoomBom> arrRoom;
-    private String roomId;
-    private String result = "";
 
     //khởi tạo mảng các row của danh sách phòng
     public RoomListAdapterSearchActivity(SearchActivity context, int resource, List<RoomBom> arrRoomBom) {
@@ -80,8 +81,6 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
         viewHolder.tvPrice.setText("Giá ".concat(String.valueOf(roomBom.getPrice())));
         viewHolder.tvNumber.setText("Phòng ".concat(String.valueOf(roomBom.getId())));
 
-        roomId = roomBom.getId();
-
         if (roomBom.getRoomtype().equals("thuong")) {
             viewHolder.ivImage.setImageResource(R.drawable.room_vip_1);
         } else {
@@ -94,7 +93,12 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
             viewHolder.btnBook.setFocusable(false);
         }
 
-        viewHolder.btnBook.setOnClickListener((View v) -> new HttpGetTask().execute());
+        viewHolder.btnBook.setOnClickListener((View v) -> {
+            new HttpGetTask()
+                    .execute(String.valueOf(roomBom.getId()), String.valueOf(position));
+            SearchActivity.customAdapter.notifyDataSetChanged();
+        });
+
         return convertView;
     }
 
@@ -113,52 +117,64 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
         Button btnBook;
     }
 
-    public String getLink() {
+    private String getLink(String id) {
         return PSFString.MAIN_LINK_FILTER_BOOK_ROOM
                 .concat(PSFString.ID_FIELD.concat(SignInActivity.userBom.getCmnd()))
-                .concat(PSFString.ROOM_ID_FILTER.concat(roomId))
+                .concat(PSFString.ROOM_ID_FILTER.concat(id))
                 .concat(PSFString.CHECK_IN_FILTER.concat(SearchActivity.getCheckInDate()))
                 .concat(PSFString.CHECK_OUT_FILTER.concat(SearchActivity.getCheckOutDate()));
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class HttpGetTask extends AsyncTask<Void, Integer, String> {
+    private class HttpGetTask extends AsyncTask<String, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-
+        int temp = 0;
 
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
+
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET
-                    , getLink(), null
-                    , response -> result = response.toString(), error -> {
+        protected String doInBackground(String... params) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, getLink(params[0]), response -> {
+                arrRoom.remove(Integer.parseInt(params[1]));
+                temp = 1;
+            }, error -> {
             });
 
-            requestQueue.add(jsonObjectRequest);
+            requestQueue.add(stringRequest);
 
-            for (int x = 1; x < 11; x++) {
+
+            for (int x = 0; x < 11; x++) {
                 sleep();
                 publishProgress(x * 10);
             }
 
-            return result;
+            try {
+                return Arrays.toString(stringRequest.getBody());
+            } catch (AuthFailureError authFailureError) {
+                authFailureError.printStackTrace();
+            }
+
+            return null;
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             mProgressBar.setProgress(values[0]);
-        }
 
+        }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(String result) {
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             SearchActivity.customAdapter.notifyDataSetChanged();
+            if (temp == 1) {
+                Toast.makeText(context, PSFString.SUCCESS_RESULT, Toast.LENGTH_LONG).show();
+            }
         }
 
         private void sleep() {

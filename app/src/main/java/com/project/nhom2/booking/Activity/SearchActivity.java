@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,11 +39,12 @@ public class SearchActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     public static ProgressBar mProgressBar;
-    public static int mDelay = 500;
+    public static int mDelay = 600;
 
     TextView CheckInDateDisplay, CheckOutDateDisplay;
     Spinner sp_room_type, sp_bed_type;
-    ListView lvRoom;
+    @SuppressLint("StaticFieldLeak")
+    public static ListView lvRoom;
 
     public static ArrayList<RoomBom> arrRoom = new ArrayList<>();
 
@@ -168,8 +168,6 @@ public class SearchActivity extends AppCompatActivity {
             Intent intent = new Intent(SearchActivity.this, ReportActivity.class);
             startActivity(intent);
         });
-
-
     }
 
 
@@ -263,7 +261,7 @@ public class SearchActivity extends AppCompatActivity {
         checkInDate = checkInYear + "-" + inMonth + "-" + checkInDay;
         checkOutDate = checkOutYear + "-" + outMonth + "-" + checkOutDay;
 
-        String link = PSFString.MAIN_LINK_FILTER_GET_ROOM
+        return PSFString.MAIN_LINK_FILTER_GET_ROOM
                 .concat(PSFString
                         .BED_TYPE_FILTER.concat(StringConfig.configString_toNoSign(sp_bed_type.getSelectedItem().toString())))
                 .concat(PSFString
@@ -272,8 +270,7 @@ public class SearchActivity extends AppCompatActivity {
                         .CHECK_IN_FILTER.concat(checkInDate))
                 .concat(PSFString
                         .CHECK_OUT_FILTER.concat(checkOutDate));
-        Log.i("here is link", link);
-        return link;
+
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -289,11 +286,12 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... params) {
             JsonArrayRequest jsonArrayRequest;
-            arrRoom.clear();
             if (params.length == 1) {
                 jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
                         , filterLink(), null, response -> {
                     try {
+                        arrRoom.clear();
+                        customAdapter.notifyDataSetChanged();
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject jsonObject = response.getJSONObject(i);
                             JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
@@ -321,7 +319,11 @@ public class SearchActivity extends AppCompatActivity {
 
 
             for (int x = 0; x < 11; x++) {
-                sleep();
+                try {
+                    sleep();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 publishProgress(x * 10);
             }
 
@@ -349,12 +351,8 @@ public class SearchActivity extends AppCompatActivity {
 
         }
 
-        private void sleep() {
-            try {
-                Thread.sleep(mDelay);
-            } catch (InterruptedException e) {
-                Log.e("ngủ", e.toString());
-            }
+        private void sleep() throws InterruptedException {
+            Thread.sleep(mDelay);
         }
 
     }

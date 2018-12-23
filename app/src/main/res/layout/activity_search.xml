@@ -9,8 +9,8 @@
     tools:context=".Activity.SearchActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -123,9 +123,9 @@
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/sp_room_type"
-                        android:textSize="20sp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -161,27 +161,30 @@
                 android:id="@+id/btn_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="@string/search"
                 android:textSize="20sp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="5dip"
-                android:minHeight="5dip"
+                android:layout_height="5dp"
                 android:visibility="invisible"
-                tools:targetApi="lollipop">
-            </ProgressBar>
+                tools:targetApi="lollipop" />
 
         </LinearLayout>
 
         <ListView
             android:id="@+id/lvRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
