@@ -152,6 +152,7 @@ public class RoomOptionActivity extends AppCompatActivity {
                                     btnRequest.setClickable(false);
                                     btnRequest.setFocusable(false);
                                     btnRequest.setEnabled(false);
+                                    etCost.setVisibility(EditText.GONE);
                                     break;
                             }
                         }
@@ -176,7 +177,7 @@ public class RoomOptionActivity extends AppCompatActivity {
             }
             requestQueue.add(jsonArrayRequest);
 
-            for (int x = 1; x < 11; x++) {
+            for (int x = 0; x < 11; x++) {
                 sleep();
                 publishProgress(x * 10);
             }
@@ -197,6 +198,11 @@ public class RoomOptionActivity extends AppCompatActivity {
             if (temp == 1) {
                 layout.setVisibility(LinearLayout.VISIBLE);
                 tvPrice.setVisibility(TextView.VISIBLE);
+            }
+
+            else  {
+                Toast.makeText(getApplicationContext(), PSFString.SUCCESS_RESULT, Toast.LENGTH_LONG).show();
+                etCost.setVisibility(EditText.GONE);
             }
 
         }

@@ -86,7 +86,6 @@ public class ReportActivity extends AppCompatActivity {
                 link = link
                         .concat(StringConfig.configString_toSign_Report(sp_filter.getSelectedItem().toString()));
             }
-            Log.i("link report", link);
             new HttpGetTask().execute();
         });
 
@@ -101,6 +100,7 @@ public class ReportActivity extends AppCompatActivity {
         protected void onPreExecute() {
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
             pieChart.setVisibility(PieChart.GONE);
+
         }
 
         @Override
