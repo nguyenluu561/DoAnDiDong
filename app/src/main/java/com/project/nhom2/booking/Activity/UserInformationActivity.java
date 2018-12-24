@@ -11,7 +11,7 @@ import com.project.nhom2.booking.R;
 
 public class UserInformationActivity extends AppCompatActivity {
 
-    TextView tv_name, tv_userType, tv_score, tv_phonenumber;
+    TextView tv_name, tv_userType, tv_score, tv_phonenumber, tv_cmnd;
     UserBom userBom;
     FloatingActionButton btnBack, btnLogOut;
 
@@ -28,6 +28,7 @@ public class UserInformationActivity extends AppCompatActivity {
         tv_userType = findViewById(R.id.tv_userType);
         tv_score = findViewById(R.id.tv_score);
         tv_phonenumber = findViewById(R.id.tv_phonenumber);
+        tv_cmnd = findViewById(R.id.tv_cmnd);
 
         btnLogOut = findViewById(R.id.menu_logOut);
         btnBack = findViewById(R.id.menu_back);
@@ -38,6 +39,7 @@ public class UserInformationActivity extends AppCompatActivity {
         tv_userType.setText(getUser(userBom.getUserType()));
         tv_score.setText(String.valueOf(userBom.getHistory()));
         tv_phonenumber.setText(userBom.getPhoneNumber());
+        tv_cmnd.setText(userBom.getCmnd());
 
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(UserInformationActivity.this, SearchActivity.class);

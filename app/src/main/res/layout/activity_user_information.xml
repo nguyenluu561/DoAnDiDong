@@ -111,6 +111,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_cmnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -119,7 +120,7 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/_2"
+            android:text="222222222"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
