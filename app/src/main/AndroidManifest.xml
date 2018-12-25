@@ -18,9 +18,7 @@
         tools:targetApi="m">
         <activity
             android:name=".Activity.SearchActivity"
-            tools:ignore="InnerclassSeparator">
-
-        </activity>
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activity.SignInActivity"
             tools:ignore="InnerclassSeparator">
@@ -29,7 +27,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".Activity.SignUpActivity"
@@ -39,9 +36,7 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activity.ReportActivity"
-            tools:ignore="InnerclassSeparator">
-
-        </activity>
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activity.RoomOptionActivity"
             tools:ignore="InnerclassSeparator" />
