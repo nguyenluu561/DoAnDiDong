@@ -74,6 +74,7 @@ public class SearchActivity extends AppCompatActivity {
     private int checkOutMonth;
     private int checkOutDay;
 
+
     //ngày nhỏ nhất và khoảng thời gian dài nhất có thể đặt phòng
     private long checkInMinDate = System.currentTimeMillis();
     //cho phép đặt phòng sớm nhất là trước 3 tháng tính từ thời điểm hiện tại
@@ -150,14 +151,16 @@ public class SearchActivity extends AppCompatActivity {
             btnUser.setFocusable(false);
         }
 
-        btn_search.setOnClickListener(v -> new HttpGetTask().execute(1));
+
+        btn_search.setOnClickListener(v -> new HttpGetTask_Search().execute());
+
+        btnUser.setOnClickListener(v -> new HttpGetTask_User().execute());
+
 
         btnBill.setOnClickListener(v -> {
             Intent intent = new Intent(SearchActivity.this, RoomOptionActivity.class);
             startActivity(intent);
         });
-
-        btnUser.setOnClickListener(v -> new HttpGetTask().execute(1, 2));
 
         btnLogOut.setOnClickListener(v -> {
             Intent intent = new Intent(SearchActivity.this, SignInActivity.class);
@@ -274,7 +277,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class HttpGetTask extends AsyncTask<Integer, Integer, String> {
+    private class HttpGetTask_Search extends AsyncTask<Void, Integer, String> {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String abc = "a";
 
@@ -284,39 +287,27 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(Integer... params) {
-            JsonArrayRequest jsonArrayRequest;
-            if (params.length == 1) {
-                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
-                        , filterLink(), null, response -> {
-                    try {
-                        arrRoom.clear();
-                        customAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
-                            RoomBom room = RoomBom.builder()
-                                    .id(jsonObject.getString("MaPhong"))
-                                    .bedtype(jsonObject1.getString("TenLoaiPhong"))
-                                    .roomtype(jsonObject1.getString("ChatLuong"))
-                                    .price(jsonObject1.getInt("Gia")).build();
-                            arrRoom.add(room);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        protected String doInBackground(Void... params) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                    , filterLink(), null, response -> {
+                try {
+                    arrRoom.clear();
+                    customAdapter.notifyDataSetChanged();
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("LoaiPhong");
+                        RoomBom room = RoomBom.builder()
+                                .id(jsonObject.getString("MaPhong"))
+                                .bedtype(jsonObject1.getString("TenLoaiPhong"))
+                                .roomtype(jsonObject1.getString("ChatLuong"))
+                                .price(jsonObject1.getInt("Gia")).build();
+                        arrRoom.add(room);
                     }
-                }, Throwable::printStackTrace);
-
-
-            } else {
-                jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
-                        , PSFString.HISTORY.concat(SignInActivity.userBom.getCmnd())
-                        , null, response -> SignInActivity.userBom.setHistory(response.length()), Throwable::printStackTrace);
-                abc = "b";
-            }
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }, Throwable::printStackTrace);
             requestQueue.add(jsonArrayRequest);
-
 
             for (int x = 0; x < 11; x++) {
                 try {
@@ -343,11 +334,60 @@ public class SearchActivity extends AppCompatActivity {
             if (arrRoom.size() != 0) {
                 lvRoom.setAdapter(customAdapter);
                 customAdapter.notifyDataSetChanged();
-            } else if (abc.equals("b")) {
-                Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
-                startActivity(intent);
             } else
                 Toast.makeText(getApplicationContext(), PSFString.NULL_RESULT, Toast.LENGTH_LONG).show();
+
+        }
+
+        private void sleep() throws InterruptedException {
+            Thread.sleep(mDelay);
+        }
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class HttpGetTask_User extends AsyncTask<Void, Integer, String> {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET
+                    , PSFString.HISTORY.concat(SignInActivity.userBom.getCmnd())
+                    , null, response -> SignInActivity.userBom.setHistory(response.length()), Throwable::printStackTrace);
+            requestQueue.add(jsonArrayRequest);
+
+
+            for (int x = 0; x < 11; x++) {
+                try {
+                    sleep();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                publishProgress(x * 10);
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            mProgressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+            Intent intent = new Intent(SearchActivity.this, UserInformationActivity.class);
+            startActivity(intent);
+
 
         }
 
