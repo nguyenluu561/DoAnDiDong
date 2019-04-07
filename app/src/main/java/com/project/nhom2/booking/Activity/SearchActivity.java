@@ -98,11 +98,11 @@ public class SearchActivity extends AppCompatActivity {
     private void init() {
 
         // Gán các component trên giao diện
-        CheckInDateDisplay = findViewById(R.id.check_in_date_picker);
+/*        CheckInDateDisplay = findViewById(R.id.check_in_date_picker);
         CheckOutDateDisplay = findViewById(R.id.check_out_date_picker);
 
         sp_room_type = findViewById(R.id.sp_room_type);
-        sp_bed_type = findViewById(R.id.sp_bed_type);
+        sp_bed_type = findViewById(R.id.sp_bed_type);*/
 
         btn_search = findViewById(R.id.btn_search);
         btnUser = findViewById(R.id.menu_user);
@@ -115,15 +115,15 @@ public class SearchActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.progressBar);
 
         //Khởi tạo các mảng dữ liệu
-        ArrayAdapter<CharSequence> arr_room_type =
+      /*  ArrayAdapter<CharSequence> arr_room_type =
                 ArrayAdapter.createFromResource(this, R.array.sp_room_type, R.layout.spinner_item);
         ArrayAdapter<CharSequence> arr_bed_type =
-                ArrayAdapter.createFromResource(this, R.array.sp_bed_type, R.layout.spinner_item);
+                ArrayAdapter.createFromResource(this, R.array.sp_bed_type, R.layout.spinner_item);*/
 
         //Gắn dữ liệu cho các spinner
-        sp_room_type.setAdapter(arr_room_type);
+       /* sp_room_type.setAdapter(arr_room_type);
         sp_bed_type.setAdapter(arr_bed_type);
-
+*/
         //Lấy ngày hiện tại
         final Calendar c = Calendar.getInstance();
         checkInYear = c.get(Calendar.YEAR);

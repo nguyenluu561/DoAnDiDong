@@ -24,7 +24,7 @@
                 android:id="@+id/input_roomId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/numberRoom"
+                android:hint="test"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textSize="20sp"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="@string/searchRoom"
+            android:text="test"
             android:textSize="20sp" />
 
         <ProgressBar
@@ -108,7 +108,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="@string/numberRoom"
+                    android:text="test"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -140,7 +140,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="@string/status"
+                    android:text="test"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -172,7 +172,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="@string/room_type"
+                    android:text="test"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -204,7 +204,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="@string/bed_type"
+                    android:text="test"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -229,7 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/searchRoom"
+                android:text="test"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -280,9 +280,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_report" />
-
-
     </com.github.clans.fab.FloatingActionMenu>
-
-
 </FrameLayout>

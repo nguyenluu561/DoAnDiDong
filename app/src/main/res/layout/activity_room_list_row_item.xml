@@ -29,7 +29,7 @@
             tools:ignore="NestedWeights">
 
             <TextView
-                android:id="@+id/room_numer"
+                android:id="@+id/book_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -37,7 +37,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/room_type"
+                android:id="@+id/book_author"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -45,7 +45,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/bed_type"
+                android:id="@+id/book_category"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -53,7 +53,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/price"
+                android:id="@+id/book_sub_category"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -63,12 +63,12 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_book"
+            android:id="@+id/btn_book_download"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/child_radius_background_white"
-            android:text="@string/book"
+            android:text="@string/book_download"
             android:textColor="@color/colorPrimary" />
 
     </LinearLayout>

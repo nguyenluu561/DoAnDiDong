@@ -68,15 +68,15 @@ public class ReportActivity extends AppCompatActivity {
         btnReport = findViewById(R.id.btn_report);
         pieChart = findViewById(R.id.piechart);
 
-        ArrayAdapter<CharSequence> arr_year =
+       /* ArrayAdapter<CharSequence> arr_year =
                 ArrayAdapter.createFromResource(this, R.array.sp_year, R.layout.spinner_item);
 
         sp_year.setAdapter(arr_year);
 
         ArrayAdapter<CharSequence> arr_filter =
-                ArrayAdapter.createFromResource(this, R.array.sp_filter, R.layout.spinner_item);
+                ArrayAdapter.createFromResource(this, R.array.sp_filter, R.layout.spinner_item);*/
 
-        sp_filter.setAdapter(arr_filter);
+        /*sp_filter.setAdapter(arr_filter);*/
 
         btnReport.setOnClickListener(v -> {
             link = PSFString.REPORT

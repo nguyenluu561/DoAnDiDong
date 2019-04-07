@@ -16,9 +16,16 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
+        <activity android:name=".ReadAcitivity"></activity>
         <activity
             android:name=".Activity.SearchActivity"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activity.SignInActivity"
             tools:ignore="InnerclassSeparator">

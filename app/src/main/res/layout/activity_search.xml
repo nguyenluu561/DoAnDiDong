@@ -36,93 +36,17 @@
                     android:layout_weight="1"
                     android:background="@drawable/child_radius_background_white"
                     android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/check_in"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/check_in_date_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:drawableStart="@mipmap/icon_calendar"
-                        android:drawableLeft="@mipmap/icon_calendar"
-                        android:focusable="true"
-                        android:onClick="onClickCheckInDate"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/child_radius_background_white"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/check_out"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/check_out_date_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:drawableStart="@mipmap/icon_calendar"
-                        android:drawableLeft="@mipmap/icon_calendar"
-                        android:focusable="true"
-                        android:onClick="onClickCheckOutDate"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/child_radius_background_white"
-                    android:orientation="vertical"
                     android:padding="6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/room_type"
+                        android:text="@string/book_sub_category"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/sp_room_type"
+                        android:id="@+id/sp_book_sub_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp" />
@@ -146,12 +70,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/bed_type"
+                        android:text="@string/book_category"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp" />
 
                     <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/sp_bed_type"
+                        android:id="@+id/sp_book_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

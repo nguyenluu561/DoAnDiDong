@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/cmnd"
+                android:hint=""
                 android:importantForAutofill="no"
                 tools:ignore="UnusedAttribute" />
         </android.support.design.widget.TextInputLayout>
@@ -85,7 +85,7 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:backgroundTint="@color/orangeDark"
-            android:text="@string/signup2"
+            android:text="@string/signup"
             tools:targetApi="lollipop" />
 
     </LinearLayout>

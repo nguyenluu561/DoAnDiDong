@@ -1,56 +1,57 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">JustBook</string>
+    <string name="app_name">JustRead</string>
 
-    <string name="room_type">Loại phòng</string>
-    <string name="bed_type">Loại giường</string>
-    <string name="check_in">Ngày đến</string>
-    <string name="check_out">Ngày đi</string>
-    <string name="search">Tìm</string>
-    <string name="book">Đặt phòng</string>
+    <string name="book_category">Thể loại</string>
+    <string name="book_sub_category">Loại sách</string>
+    <string name="book_author">Tác giả</string>
+    <string name="book_title">Tựa sách</string>
+    <string name="book_rating">Điểm số</string>
+    <string name="book_image">Bìa sách</string>
+    <string name="book_public_date">Ngày phát hành</string>
+    <string name="book_rated_time">Số lượt đánh giá</string>
+    <string name="book_download">Tải sách</string>
+    <string name="book_pages">Số trang</string>
+    <string name="book_descriptions">Tóm tắt</string>
 
-    <string-array name="sp_room_type">
-        <item>Thường</item>
-        <item>VIP</item>
-    </string-array>
 
-    <string-array name="sp_bed_type">
-        <item>Đơn</item>
-        <item>Đôi</item>
-    </string-array>
-
-    <string-array name="sp_year">
-        <item>2018</item>
-    </string-array>
-
-    <string-array name="sp_filter">
-        <item>Phòng vip</item>
-        <item>Phòng thường</item>
-        <item>Giường đơn</item>
-        <item>Giường đôi</item>
-        <item>Tổng</item>
-    </string-array>
+    <string name="fiction">Fiction</string>
+    <string name="non_fiction">Non Fiction</string>
+    <string name="academic">Academic</string>
+    <string name="textbook">Textbook</string>
+    <string name="others">Others</string>
+    <string name="fiction_audiobook">Fiction Audiobooks</string>
+    <string name="non_fiction_audiobook">Non Fiction Audiobooks</string>
+    <string name="children_audiobook">Children Audiobooks</string>
 
     <string name="name">Tên</string>
-    <string name="cmnd">Cmnd</string>
     <string name="usertype">Thành viên</string>
     <string name="phonenumber">Số điện thoại</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
+    <string name="search">Tìm kiếm</string>
 
 
     <string name="signin">Đăng nhập</string>
-    <string name="signup1">Chưa có tài khoản? Đăng kí</string>
-    <string name="signup2">Đăng kí</string>
+    <string name="signup">Đăng kí</string>
 
-    <string name="score">Điểm tích luỹ</string>
-    <string name="_2">2</string>
-    <string name="vip">VIP</string>
 
     <string name="report">Thống kê</string>
-    <string name="searchRoom">Tìm phòng</string>
-    <string name="numberRoom">Số phòng</string>
-    <string name="status">Tình trạng</string>
-    <string name="filter">Điều kiện</string>
-    <string name="year">Năm</string>
 
+
+    <!--untranslatable-->
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_vietnamese" translatable="false">Tiếng Việt</string>
+
+    <string-array name="language_names">
+        <item>@string/language_english</item>
+        <item>@string/language_vietnamese</item>
+    </string-array>
+
+    <string name="language_english_code" translatable="false">en</string>
+    <string name="language_vietnamese_code" translatable="false">vi</string>
+
+    <string-array name="language_codes">
+        <item>@string/language_english_code</item>
+        <item>@string/language_vietnamese_code</item>
+    </string-array>
 </resources>

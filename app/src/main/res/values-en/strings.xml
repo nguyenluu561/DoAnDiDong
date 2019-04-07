@@ -1,0 +1,37 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">JustRead</string>
+
+    <string name="book_category">Category</string>
+    <string name="book_sub_category">Subcategory</string>
+    <string name="book_author">Author</string>
+    <string name="book_title">Title</string>
+    <string name="book_rating">Rating</string>
+    <string name="book_image">Book cover</string>
+    <string name="book_public_date">Publication date</string>
+    <string name="book_rated_time">Rating times</string>
+    <string name="book_download">Download</string>
+    <string name="book_pages">Pages</string>
+    <string name="book_descriptions">Description</string>
+
+
+    <string name="fiction">Fiction</string>
+    <string name="non_fiction">Non Fiction</string>
+    <string name="academic">Academic</string>
+    <string name="textbook">Textbook</string>
+    <string name="others">Others</string>
+    <string name="fiction_audiobook">Fiction Audiobook</string>
+    <string name="non_fiction_audiobook">Non Fiction Audiobook</string>
+    <string name="children_audiobook">Children Audiobook</string>
+
+    <string name="name">Name</string>
+    <string name="usertype">User</string>
+    <string name="phonenumber">Phone number</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signin">Signin</string>
+    <string name="signup">Signup</string>
+    <string name="report">Report</string>
+    <string name="search">Search</string>
+
+
+</resources>

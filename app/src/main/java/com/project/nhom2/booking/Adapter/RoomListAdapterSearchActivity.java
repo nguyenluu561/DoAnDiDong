@@ -66,9 +66,13 @@ public class RoomListAdapterSearchActivity extends ArrayAdapter<RoomBom> {
             viewHolder.tvPrice = convertView.findViewById(R.id.price);
             viewHolder.tvBedType = convertView.findViewById(R.id.bed_type);
             viewHolder.tvRoomType = convertView.findViewById(R.id.room_type);
+/*
             viewHolder.tvNumber = convertView.findViewById(R.id.room_numer);
+ */
             viewHolder.ivImage = convertView.findViewById(R.id.ivRoom);
+/*
             viewHolder.btnBook = convertView.findViewById(R.id.btn_book);
+*/
 
             convertView.setTag(viewHolder);
         } else {
